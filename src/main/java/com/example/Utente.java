@@ -41,11 +41,19 @@ public class Utente {
                 new SendBroadcastMsg(this).execute();
                 break;
             case 0:
+                connection.close();
+                break;
+            default:
+                System.out.println("Scelta invalida...");
         }
     }
 
     public String getNome() {
         return this.nome;
+    }
+
+    public Connection getConnection(){
+        return this.connection;
     }
 
 }

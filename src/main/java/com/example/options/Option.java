@@ -11,5 +11,9 @@ public abstract class Option {
     }
 
     public abstract String execute();
+
+    public Utente getUtente(){
+        return utente;
+    }
     
 }

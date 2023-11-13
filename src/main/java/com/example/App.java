@@ -9,8 +9,7 @@ public class App
     public static void main( String[] args )
     {
         try {
-            Connection connection = new Connection(new Socket("172.20.10.10",2750));
-            connection.getOut().writeBytes("ciao\n");
+            Connection connection = new Connection(new Socket("87.12.250.209",2750));
             Scanner scanner = new Scanner(System.in);
             String nome = "";
             do {
@@ -18,7 +17,8 @@ public class App
                 nome = scanner.nextLine();
             } while (nome.trim() == "");
             System.out.println("Benvenuto " + nome + "!");
-            Utente  utente = new Utente(nome, connection);
+            connection.getOut().writeBytes(nome + "\n");
+            Utente utente = new Utente(nome, connection);
             int scelta = 0;
             do {
                 System.out.println("--- Scegli un'azione ------------");
