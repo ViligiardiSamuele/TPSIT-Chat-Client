@@ -9,7 +9,7 @@ public class App
     public static void main( String[] args )
     {
         try {
-            Connection connection = new Connection(new Socket("87.12.250.209",2750));
+            Connection connection = new Connection(new Socket("95.235.133.142",2750));
             Scanner scanner = new Scanner(System.in);
             String nome = "";
             do {

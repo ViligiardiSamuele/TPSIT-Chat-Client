@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import com.example.options.SendBroadcastMsg;
+import com.example.options.SendCustomTxt;
 import com.example.options.SendMsgAtUser;
 import com.example.options.SendMsgAtUsers;
 import com.example.options.ShowUsers;
@@ -13,7 +14,7 @@ public class Utente {
     private String nome;
     private Connection connection;
 
-    public Utente(String nome,  Connection connection) {
+    public Utente(String nome, Connection connection) {
         this.nome = nome;
         this.connection = connection;
     }
@@ -40,6 +41,9 @@ public class Utente {
             case 4:
                 new SendBroadcastMsg(this).execute();
                 break;
+            case 5:
+                new SendCustomTxt(this).execute();
+                break;
             case 0:
                 connection.close();
                 break;
@@ -52,7 +56,7 @@ public class Utente {
         return this.nome;
     }
 
-    public Connection getConnection(){
+    public Connection getConnection() {
         return this.connection;
     }
 

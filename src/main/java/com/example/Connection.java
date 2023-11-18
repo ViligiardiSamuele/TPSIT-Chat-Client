@@ -5,7 +5,6 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-import com.google.gson.Gson;
 
 /**
  * <p>Questa classe gestisce le connessioni socket con un server ed
