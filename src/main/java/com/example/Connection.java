@@ -5,10 +5,11 @@ import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-
 /**
- * <p>Questa classe gestisce le connessioni socket con un server ed
- * offre metodi per la gestione di quest'ultima</p>
+ * <p>
+ * Questa classe gestisce le connessioni socket con un server ed
+ * offre metodi per la gestione di quest'ultima
+ * </p>
  */
 public class Connection {
     private Socket s;
@@ -16,7 +17,10 @@ public class Connection {
     private DataOutputStream out;
 
     /**
-     * <p>Costruttore</p>
+     * <p>
+     * Costruttore
+     * </p>
+     * 
      * @param s Socket
      */
     public Connection(Socket s) {
@@ -46,12 +50,14 @@ public class Connection {
     }
 
     /**
-     * <p>Chiude la connessione inviando "bye:1" al server ed
-     * invocando il metodo .close() sulla Socket</p>
+     * <p>
+     * Chiude la connessione inviando "bye:1" al server ed
+     * invocando il metodo .close() sulla Socket
+     * </p>
      */
     public void close() {
         try {
-            out.writeBytes("bye:1");
+            out.writeBytes("bye:1" + "\n");
             s.close();
         } catch (Exception e) {
             System.out.println(e);
@@ -59,20 +65,26 @@ public class Connection {
     }
 
     /**
-     * <p>Invoca il metono compose() ed invia il pacchetto</p>
-     * @param key Codice comando (es. msg)
+     * <p>
+     * Invoca il metono compose() ed invia il pacchetto
+     * </p>
+     * 
+     * @param key   Codice comando (es. msg)
      * @param value Valore accoppiato (es. "Hello")
      */
     public void sendKeyValue(String key, String value) {
         try {
-            this.out.writeBytes(compose(key, value));
+            this.out.writeBytes(compose(key, value) + "\n");
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
     /**
-     * <p>Rimane in ascolto su cosa invia il server</p>
+     * <p>
+     * Rimane in ascolto su cosa invia il server
+     * </p>
+     * 
      * @return String[] con dentro 2 valori: "key","value"
      */
     public String[] receveKeyValue() {
@@ -81,12 +93,15 @@ public class Connection {
         } catch (Exception e) {
             System.out.println(e);
         }
-        return new String[]{};
+        return new String[] {};
     }
 
     /**
-     * <p>Compone il messaggio per essere inviato</p>
-     * @param cmd Comando (es. "cmd")
+     * <p>
+     * Compone il messaggio per essere inviato
+     * </p>
+     * 
+     * @param cmd  Comando (es. "cmd")
      * @param data Valore aggiuntivo (es. "Hello")
      * @return Stringa composta
      */
@@ -95,7 +110,9 @@ public class Connection {
     }
 
     /**
-     * <p></p>
+     * <p>
+     * </p>
+     * 
      * @param s
      * @return
      */

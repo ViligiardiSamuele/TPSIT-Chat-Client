@@ -22,10 +22,24 @@ public class Utente {
     public void options(int option) {
         switch (option) {
             case 1:
-                new ShowUsers(this).execute();
+                System.out.println(new ShowUsers(this).execute());
                 break;
-            case 2:
-                new SendMsgAtUser(this).execute();
+            case 2: //OK
+                String destinatario, msg;
+                Scanner s = new Scanner(System.in);
+                //chiede destinatario
+                System.out.print("Inserisci destinatario: ");
+                do{
+                    destinatario = s.nextLine();
+                } while(destinatario.trim() == "");
+                //chiede messaggio
+                System.out.print("Scrivi il messaggio per " + destinatario + " (\"Invio\" per inviare): ");
+                do{
+                    msg = s.nextLine();
+                } while(msg.trim() == "");
+                System.out.println("Invio messaggio...");
+                //esegue
+                System.out.println(new SendMsgAtUser(this, destinatario, msg).execute());
                 break;
             case 3:
                 List<String> users = new ArrayList<>();

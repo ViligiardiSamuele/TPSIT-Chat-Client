@@ -8,7 +8,7 @@
 |usersListRequest       |Client -> Server|1                  |Richiedi la lista di tutti gli utenti online                                    |
 |usersList              |Server -> Client|Nomi utenti        |Risposta del server con la lista degli utenti online es: "Mario;Luigi;Paolo"    |
 |switchBroadcast        |Client -> Server|1                  |Notifica al Server l'intenzione di inviare un messaggio in broadcast            |
-|switchToUser["Mario"]  |Client -> Server|Nome destinatario  |Invia il nome del destinatario es: "Mario"                                      |
+|switchToUser           |Client -> Server|Nome destinatario  |Invia il nome del destinatario                                                  |
 |msgRequest             |Server -> Client|1                  |Notifica al client che il server attende il messaggio                           |
 |msg                    |Client -> Server|Messaggio          |Messaggio da inviare                                                            |
 |msg                    |Server -> Client|Messaggio          |Messaggio da ricevere                                                           |

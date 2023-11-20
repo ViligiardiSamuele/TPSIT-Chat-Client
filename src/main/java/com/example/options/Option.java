@@ -1,10 +1,10 @@
 package com.example.options;
 
-
 import com.example.Utente;
+import com.example.protocolCodes;
 
 public abstract class Option {
-    private Utente utente;
+    protected Utente utente;
 
     public Option(Utente utente) {
         this.utente = utente;

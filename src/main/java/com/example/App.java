@@ -4,12 +4,15 @@ import java.net.Socket;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class App 
-{
+public class App {
     public static void main( String[] args )
     {
+        String ip = "192.168.137.150"; 
         try {
-            Connection connection = new Connection(new Socket("95.235.133.142",2750));
+            //Connection broadcastConnection = new Connection(new Socket(ip,2751));
+            //BroadcastListener broadcastListener = new BroadcastListener(broadcastConnection);
+
+            Connection connection = new Connection(new Socket(ip,2750));
             Scanner scanner = new Scanner(System.in);
             String nome = "";
             do {
@@ -17,8 +20,8 @@ public class App
                 nome = scanner.nextLine();
             } while (nome.trim() == "");
             System.out.println("Benvenuto " + nome + "!");
-            connection.getOut().writeBytes(nome + "\n");
             Utente utente = new Utente(nome, connection);
+            utente.getConnection().sendKeyValue(protocolCodes.HELLO.toString(), nome);
             int scelta = 0;
             do {
                 System.out.println("--- Scegli un'azione ------------");
