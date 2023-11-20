@@ -11,10 +11,11 @@ import java.net.Socket;
  * offre metodi per la gestione di quest'ultima
  * </p>
  */
-public class Connection {
+public class Connection extends Thread {
     private Socket s;
     private BufferedReader in;
     private DataOutputStream out;
+    private String[] lastMsgFromServer;
 
     /**
      * <p>
@@ -24,13 +25,29 @@ public class Connection {
      * @param s Socket
      */
     public Connection(Socket s) {
-
         this.s = s;
         try {
             this.in = new BufferedReader(new InputStreamReader(s.getInputStream()));
             this.out = new DataOutputStream(s.getOutputStream());
         } catch (Exception e) {
             System.out.println("Errore istanza Connessione: " + e.getMessage());
+        }
+        lastMsgFromServer = new String[] {"msgRequest","1"};
+    }
+
+    @Override
+    public void run() {
+        String[] response;
+        while (true) {
+            response = receveKeyValue();
+            if (response[0] == "msgRecivedBroadcast") {
+                System.out.println("-----------------");
+                System.out.print("Canale Broadcast: " + response[1]);
+                System.out.println("-----------------");
+            } else {
+                lastMsgFromServer = response;
+                System.out.println(lastMsgFromServer[0] + " : " + lastMsgFromServer[1]);
+            }
         }
     }
 
@@ -87,7 +104,7 @@ public class Connection {
      * 
      * @return String[] con dentro 2 valori: "key","value"
      */
-    public String[] receveKeyValue() {
+    private String[] receveKeyValue() {
         try {
             return deCompose(in.readLine());
         } catch (Exception e) {
@@ -119,4 +136,13 @@ public class Connection {
     public String[] deCompose(String s) {
         return s.split(":");
     }
+
+    public Socket getSocket() {
+        return s;
+    }
+
+    public String[] getLastMsgFromServer() {
+        return lastMsgFromServer;
+    }
+
 }

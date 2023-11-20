@@ -5,14 +5,11 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class App {
-    public static void main( String[] args )
-    {
-        String ip = "192.168.137.150"; 
+    public static void main(String[] args) {
+        String ip = "localhost";
+        int porta = 2750;
         try {
-            //Connection broadcastConnection = new Connection(new Socket(ip,2751));
-            //BroadcastListener broadcastListener = new BroadcastListener(broadcastConnection);
-
-            Connection connection = new Connection(new Socket(ip,2750));
+            Connection connection = new Connection(new Socket(ip, porta));
             Scanner scanner = new Scanner(System.in);
             String nome = "";
             do {
@@ -21,6 +18,7 @@ public class App {
             } while (nome.trim() == "");
             System.out.println("Benvenuto " + nome + "!");
             Utente utente = new Utente(nome, connection);
+            connection.start();
             utente.getConnection().sendKeyValue(protocolCodes.HELLO.toString(), nome);
             int scelta = 0;
             do {
@@ -42,7 +40,7 @@ public class App {
             } while (scelta != 0);
             scanner.close();
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         System.exit(0);
     }
