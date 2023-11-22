@@ -5,8 +5,6 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Connessione {
     private Socket socket;
@@ -17,7 +15,8 @@ public class Connessione {
      * Buffer su cui il LoopListener
      * scrive ogni messaggio che riceve
      */
-    private List<String[]> buffer;
+    protected String[] lasMsgFromServer;
+    protected Boolean lmfsHasValue;
 
     private LoopListener loopListener;
 
@@ -29,7 +28,7 @@ public class Connessione {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        buffer = new ArrayList<>();
+        lmfsHasValue = false;
         loopListener = new LoopListener(this);
         loopListener.start(); // Avvio LoopListener
     }
@@ -55,6 +54,7 @@ public class Connessione {
 
     /**
      * Invia un messaggio al server
+     * 
      * @param cmd   da ProtocolCodes
      * @param value inserito dall'utente
      */
@@ -74,8 +74,8 @@ public class Connessione {
         return in;
     }
 
-    public List<String[]> getBuffer() {
-        return buffer;
+    public String[] getLasMsgFromServer() {
+        return lasMsgFromServer;
     }
 
 }

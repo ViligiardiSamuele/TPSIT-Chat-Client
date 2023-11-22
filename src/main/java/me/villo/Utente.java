@@ -1,6 +1,5 @@
 package me.villo;
 
-
 public class Utente {
     private String nome;
     private Connessione connessione;
@@ -14,7 +13,16 @@ public class Utente {
 
     }
 
-    public ActionManager getActionManager(){
+    public ActionManager getActionManager() {
         return actionManager;
     }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public Connessione getConnessione() {
+        return connessione;
+    }
+
 }

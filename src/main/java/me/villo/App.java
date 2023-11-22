@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) {
+        // String ip = "95.235.133.142";
         String ip = "localhost";
         int porta = 2750;
         Scanner scanner = new Scanner(System.in);

@@ -1,7 +1,5 @@
 package me.villo;
 
-import java.util.List;
-
 /**
  * <p>
  * Gestisce l'input da tastiera di un utente
@@ -120,19 +118,15 @@ public class ActionManager {
      */
     public void checkMsgRequest() {
         System.out.println("Aspetto conferma server...");
-        Boolean nonRicevuto = true;
-        List<String[]> messaggi;
-        String[] ricevuto = new String[] {};
         do {
-            messaggi = connessione.getBuffer();
-            for (String[] msg : messaggi) {
-                if (msg[0].equals(ProtocolCodes.MSG_REQUEST.toString())) {
+            if (connessione.lmfsHasValue) {
+                // System.out.println(messaggi.toString());
+                if (connessione.lasMsgFromServer[0].equals(ProtocolCodes.MSG_REQUEST.toString())) {
                     System.out.println("Conferma ricevuta");
-                    nonRicevuto = false;
-                    ricevuto = msg;
+                    connessione.lmfsHasValue = false;
+                    return;
                 }
             }
-        } while (nonRicevuto); // non continua se non arriva il messaggio
-        messaggi.remove(ricevuto);
+        } while (!connessione.lmfsHasValue);
     }
 }

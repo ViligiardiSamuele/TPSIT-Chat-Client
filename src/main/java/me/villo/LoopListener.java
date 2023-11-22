@@ -39,9 +39,11 @@ public class LoopListener extends Thread {
                     // Stampa messaggio broadcast
                     System.out.print("Messaggio Broadcast: ");
                     System.out.println(msg[1]);
-                } else
+                } else {
                     // scrive sul buffer
-                    connessione.getBuffer().add(msg);
+                    connessione.lasMsgFromServer = msg;
+                    connessione.lmfsHasValue = true;
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
