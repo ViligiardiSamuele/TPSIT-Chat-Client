@@ -41,8 +41,12 @@ public class LoopListener extends Thread {
                     System.out.println(msg[1]);
                 } else {
                     // scrive sul buffer
-                    connessione.lasMsgFromServer = msg;
-                    connessione.lmfsHasValue = true;
+                    do {
+                        if (!connessione.lmfsHasValue) {
+                            connessione.lasMsgFromServer = msg;
+                            connessione.lmfsHasValue = true;
+                        }
+                    } while (connessione.lmfsHasValue);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

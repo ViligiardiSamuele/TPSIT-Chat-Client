@@ -65,7 +65,6 @@ public class ActionManager {
                     break;
                 case "/exit":
                     connessione.close();
-                    break;
             }
         } else {
             if (!canaleSelezionato) {
@@ -108,7 +107,7 @@ public class ActionManager {
      * @return Comando suddiviso
      */
     private String[] deComposeConsoleCommand(String command) {
-        return command.split("\\s+");
+        return command.split("-");
     }
 
     /**
@@ -119,6 +118,12 @@ public class ActionManager {
     public void checkMsgRequest() {
         System.out.println("Aspetto conferma server...");
         do {
+            //for(int i = 0; i < 1000; i++);
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if (connessione.lmfsHasValue) {
                 // System.out.println(messaggi.toString());
                 if (connessione.lasMsgFromServer[0].equals(ProtocolCodes.MSG_REQUEST.toString())) {
