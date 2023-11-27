@@ -14,7 +14,7 @@ public class LoopListener extends Thread {
      * Costruttore
      * </p>
      * 
-     * @param connessione Connessione dell'utente
+     * @param connessione {@link Connessione} dell'utente
      */
     public LoopListener(Connessione connessione) {
         this.connessione = connessione;
@@ -27,7 +27,6 @@ public class LoopListener extends Thread {
      */
     @Override
     public void run() {
-        System.out.println("[LoopListener] Avviato");
         String[] msg;
         String[] clients;
         int numClients;
@@ -35,7 +34,6 @@ public class LoopListener extends Thread {
             try {
                 // messaggio ricevuto dal server
                 msg = (connessione.getIn().readLine()).split(":");
-                System.out.println("[LoopListener] Riceve [" + msg[0] + ":" + msg[1] + "]");
                 if (msg[0].equals(ProtocolCodes.MSG.toString())) {
                     // Stampa messaggio da un utente
                     System.out.println("Messaggio da " + msg[1]);
@@ -44,24 +42,28 @@ public class LoopListener extends Thread {
                     System.out.print("Messaggio Broadcast: ");
                     System.out.println(msg[1]);
                 } else if (msg[0].equals(ProtocolCodes.USER_LIST.toString())) {
-                    // Stampa lista client collegati
+                    /**
+                     * Stampa lista client collegati
+                     * Esempio di una stringa inviata dal server:
+                     * "user_list : 2; mario; pippo;"
+                     * 2 = numero di utenti contenuti
+                     */
+                    numClients = Integer.parseInt(msg[1].split(";")[0]); // estraggo il numero
+                    msg[1] = (msg[1].split(";", 2))[1]; // estraggo gli utenti
+                    clients = msg[1].split(";", numClients); // eseguo split n volte per ogni utente
 
-                    numClients = Integer.parseInt(msg[1].split(";")[0]);
-                    msg[1] = (msg[1].split(";", 2))[1];
-                    System.out.println("msg[1]" + msg[1]);
-                    clients = msg[1].split(";", numClients);
-
-                    System.out.println("--- Client collegati " + numClients + "---");
+                    System.out.println("--- Client collegati [" + numClients + "] ---");
                     for (String client : clients) {
+                        System.out.print("- " + client);
                         if (client.equals(connessione.getUtente().getNome()))
-                            System.out.println(". " + client + " (Tu)");
-                        else
-                            System.out.println(". " + client);
+                            System.out.print(" (Tu)");
+                        System.out.println();
                     }
                     System.out.println("----------------------------");
                 } else {
                     // scrive sul buffer
                     do {
+                        // scrive solo se il buffer è vuoto
                         if (!connessione.lmfsHasValue) {
                             connessione.lasMsgFromServer = msg;
                             connessione.lmfsHasValue = true;

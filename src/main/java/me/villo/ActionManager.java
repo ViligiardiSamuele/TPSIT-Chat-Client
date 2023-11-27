@@ -14,7 +14,7 @@ public class ActionManager {
 
     private Connessione connessione;
 
-    /** input tastiera utente */
+    /** input keyboard utente */
     private String[] kbInput;
 
     /**
@@ -42,15 +42,15 @@ public class ActionManager {
             switch (kbInput[0]) {
                 case "/info":
                     System.out.println("/list              -> Visualizza gli utenti online");
-                    System.out.println("/toUser            -> Scrivi un messaggio ad un utente");
-                    System.out.println("/broadcast         -> Scrivi un messaggio a tutti");
+                    System.out.println("/user              -> Scrivi un messaggio ad un utente");
+                    System.out.println("/bc                -> Scrivi un messaggio a tutti (broadcast)");
                     System.out.println("/exit              -> Chiudi la connessione");
                     System.out.println("Scrivi per inviare un messaggio nel canase selezionato");
                     break;
                 case "/list":
                     connessione.sendCmdValue(ProtocolCodes.USERS_LIST_REQUEST.toString(), "1");
                     break;
-                case "/toUser":
+                case "/user":
                     if (chechParametro()) {
                         System.out.println("Parametro mancante");
                         break;
@@ -59,7 +59,7 @@ public class ActionManager {
                     checkMsgRequest();
                     canaleSelezionato = true;
                     break;
-                case "/broadcast":
+                case "/bc":
                     connessione.sendCmdValue(ProtocolCodes.SWITCH_BROADCAST.toString(), "1");
                     checkMsgRequest();
                     canaleSelezionato = true;
@@ -78,7 +78,6 @@ public class ActionManager {
                 return;
             } else {
                 // Invio messaggio
-                System.out.println("[" + connessione.getUtente() + "] invia [" + cmd + "]");
                 connessione.sendCmdValue(ProtocolCodes.MSG.toString(), cmd);
             }
         }
@@ -93,7 +92,7 @@ public class ActionManager {
      */
     private Boolean chechParametro() {
         try {
-            return !kbInput[1].trim().equals("");
+            return kbInput[1].trim().equals("");
         } catch (IndexOutOfBoundsException e) {
             System.out.println("!-> Parametro mancante <-!");
         } catch (Exception e) {
@@ -120,17 +119,20 @@ public class ActionManager {
      * </p>
      */
     public void checkMsgRequest() {
-        System.out.println("Aspetto conferma server...");
+        System.out.println("Richiesta inviata...");
         do {
             try {
-                Thread.sleep(100);
+                /**
+                 * Aspetta 50 ms per consentire a
+                 * LoopListener di aggiornare il buffer
+                 * prima di ritentare
+                 */
+                Thread.sleep(50);
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
             if (connessione.lmfsHasValue) {
-                // System.out.println(messaggi.toString());
                 if (connessione.lasMsgFromServer[0].equals(ProtocolCodes.MSG_REQUEST.toString())) {
-                    System.out.println("Conferma ricevuta");
+                    System.out.println("Canale cambiato");
                     connessione.lmfsHasValue = false;
                     return;
                 }

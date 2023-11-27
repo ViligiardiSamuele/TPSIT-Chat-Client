@@ -2,10 +2,22 @@ package me.villo;
 
 import java.util.Scanner;
 
+/**
+ * <p>
+ * Main
+ * </p>
+ */
 public class App {
+    /**
+     * <p>
+     * main function
+     * </p>
+     * 
+     * @param args args
+     */
     public static void main(String[] args) {
-        String ip = "192.168.209.194";
-        // String ip = "localhost";
+        // String ip = "95.235.133.142";
+        String ip = "localhost";
         int porta = 2750;
         Scanner scanner = new Scanner(System.in);
 
@@ -14,7 +26,7 @@ public class App {
         do {
             nome = scanner.nextLine();
         } while (nome.trim().equals(""));
-        System.out.println("Creazione utente " + nome + " connesso a " + ip + ":" + porta);
+        System.out.println("Creazione utente \"" + nome + "\" connesso a \"" + ip + ":" + porta + "\"");
         Utente utente = new Utente(nome, ip, porta);
 
         System.out.println("Scrivi \"/info\" per visualizzare tutti i comandi");
@@ -24,8 +36,8 @@ public class App {
                 tastiera = scanner.nextLine();
             } while (tastiera.trim().equals(""));
             utente.getActionManager().esegui(tastiera);
-        } while (tastiera.trim() != "/exit");
-
+        } while (!tastiera.trim().equals("/exit"));
         scanner.close();
+        System.exit(0);
     }
 }

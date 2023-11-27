@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
+/**
+ * Classe per gestire la connessione
+ */
 public class Connessione {
     private Socket socket;
     private BufferedReader in;
@@ -14,13 +17,20 @@ public class Connessione {
 
     /**
      * Buffer su cui il LoopListener
-     * scrive ogni messaggio che riceve
+     * scrive tutte le risposte dal server
      */
     protected String[] lasMsgFromServer;
-    protected Boolean lmfsHasValue;
+    protected Boolean lmfsHasValue; //LastMessageFromServerHasValue
 
     private LoopListener loopListener;
 
+    /**
+     * Connessione
+     * 
+     * @param ip     L'Ip del server
+     * @param porta  La porta del server
+     * @param utente Utente associato
+     */
     public Connessione(String ip, int porta, Utente utente) {
         try {
             this.socket = new Socket(ip, porta);
@@ -38,14 +48,16 @@ public class Connessione {
     /**
      * Notifica al server l'intezione di chiudere la connessione
      * <ol>
-     * <li>Chiude BufferedReader in</li>
-     * <li>Chiude DataOutputStream out</li>
+     * <li>Interrompe il LoopListener</li>
+     * <li>Chiude "BufferedReader in"</li>
+     * <li>Chiude "DataOutputStream out"</li>
      * <li>Chiude la Socket</li>
      * </ol>
      */
     public void close() {
         try {
             sendCmdValue(ProtocolCodes.BYE.toString(), "1");
+            loopListener.interrupt();
             in.close();
             out.close();
             socket.close();
@@ -57,17 +69,15 @@ public class Connessione {
     /**
      * Invia un messaggio al server
      * 
-     * @param cmd   da ProtocolCodes
+     * @param cmd   da {@link ProtocolCodes}
      * @param value inserito dall'utente
      */
     public void sendCmdValue(String cmd, String value) {
-        System.out.println("sendCmdValue(" + cmd + ":" + value + ")");
         try {
             out.writeBytes(cmd + ":" + value + '\n');
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("fine di sendCmdValue()");
     }
 
     protected Socket getSocket() {
