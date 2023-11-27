@@ -51,8 +51,10 @@ public class ActionManager {
                     connessione.sendCmdValue(ProtocolCodes.USERS_LIST_REQUEST.toString(), "1");
                     break;
                 case "/toUser":
-                    if (chechParametro())
+                    if (chechParametro()) {
+                        System.out.println("Parametro mancante");
                         break;
+                    }
                     connessione.sendCmdValue(ProtocolCodes.SWITCH_TO_USER.toString(), kbInput[1]);
                     checkMsgRequest();
                     canaleSelezionato = true;

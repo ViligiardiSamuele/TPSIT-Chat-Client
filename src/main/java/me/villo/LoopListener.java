@@ -31,7 +31,7 @@ public class LoopListener extends Thread {
         String[] msg;
         String[] clients;
         int numClients;
-        while (true) {
+        while (connessione.getSocket().isConnected()) {
             try {
                 // messaggio ricevuto dal server
                 msg = (connessione.getIn().readLine()).split(":");
@@ -45,16 +45,20 @@ public class LoopListener extends Thread {
                     System.out.println(msg[1]);
                 } else if (msg[0].equals(ProtocolCodes.USER_LIST.toString())) {
                     // Stampa lista client collegati
+
                     numClients = Integer.parseInt(msg[1].split(";")[0]);
-                    msg[1] = msg[1].split(";")[1];
+                    msg[1] = (msg[1].split(";", 2))[1];
+                    System.out.println("msg[1]" + msg[1]);
                     clients = msg[1].split(";", numClients);
+
                     System.out.println("--- Client collegati " + numClients + "---");
-                    for (int i = 0; i < numClients; i++) {
-                        if (clients[i].equals(connessione.getUtente().getNome()))
-                            System.out.println(i + " Tu");
+                    for (String client : clients) {
+                        if (client.equals(connessione.getUtente().getNome()))
+                            System.out.println(". " + client + " (Tu)");
                         else
-                            System.out.println(i + " " + clients[i]);
+                            System.out.println(". " + client);
                     }
+                    System.out.println("----------------------------");
                 } else {
                     // scrive sul buffer
                     do {
@@ -66,8 +70,6 @@ public class LoopListener extends Thread {
                     } while (connessione.lmfsHasValue);
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                System.exit(0);
             }
         }
     }
