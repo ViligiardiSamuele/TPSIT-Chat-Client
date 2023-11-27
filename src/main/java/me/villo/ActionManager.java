@@ -43,7 +43,6 @@ public class ActionManager {
                 case "/info":
                     System.out.println("/list              -> Visualizza gli utenti online");
                     System.out.println("/toUser            -> Scrivi un messaggio ad un utente");
-                    // System.out.println("/toUsers -> Scrivi un messaggio a piu' utenti");
                     System.out.println("/broadcast         -> Scrivi un messaggio a tutti");
                     System.out.println("/exit              -> Chiudi la connessione");
                     System.out.println("Scrivi per inviare un messaggio nel canase selezionato");
@@ -65,6 +64,7 @@ public class ActionManager {
                     break;
                 case "/exit":
                     connessione.close();
+                    break;
             }
         } else {
             if (!canaleSelezionato) {
@@ -74,9 +74,11 @@ public class ActionManager {
             if (cmd.trim().equals("")) {
                 System.out.println("!-> Input invalido <-!");
                 return;
-            } else
+            } else {
                 // Invio messaggio
+                System.out.println("[" + connessione.getUtente() + "] invia [" + cmd + "]");
                 connessione.sendCmdValue(ProtocolCodes.MSG.toString(), cmd);
+            }
         }
     }
 
@@ -107,7 +109,7 @@ public class ActionManager {
      * @return Comando suddiviso
      */
     private String[] deComposeConsoleCommand(String command) {
-        return command.split("-");
+        return command.trim().split("\\s+");
     }
 
     /**
@@ -118,7 +120,6 @@ public class ActionManager {
     public void checkMsgRequest() {
         System.out.println("Aspetto conferma server...");
         do {
-            //for(int i = 0; i < 1000; i++);
             try {
                 Thread.sleep(100);
             } catch (InterruptedException e) {

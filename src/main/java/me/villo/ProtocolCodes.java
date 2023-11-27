@@ -12,11 +12,11 @@ public enum ProtocolCodes {
     /**
      * Richiedi la lista degli utenti online al server
      */
-    USERS_LIST_REQUEST("usersListRequest"),
+    USERS_LIST_REQUEST("userListRequest"),
     /**
      * Lista utenti online inviata dal server
      */
-    USER_LIST("usersList"),
+    USER_LIST("userList"),
     /**
      * Notifica al server l'intenzione di inviare messaggi in broadcast
      */

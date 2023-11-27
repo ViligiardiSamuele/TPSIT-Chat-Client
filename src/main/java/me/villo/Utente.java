@@ -5,9 +5,9 @@ public class Utente {
     private Connessione connessione;
     private ActionManager actionManager;
 
-    public Utente(String nome, Connessione connessione) {
+    public Utente(String nome, String ip, int porta) {
         this.nome = nome;
-        this.connessione = connessione;
+        this.connessione = new Connessione(ip, porta, this);
         actionManager = new ActionManager(connessione);
         connessione.sendCmdValue("hello", nome);
 

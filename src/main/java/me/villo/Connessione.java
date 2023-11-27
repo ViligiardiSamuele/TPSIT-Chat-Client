@@ -10,6 +10,7 @@ public class Connessione {
     private Socket socket;
     private BufferedReader in;
     private DataOutputStream out;
+    private Utente utente;
 
     /**
      * Buffer su cui il LoopListener
@@ -20,7 +21,7 @@ public class Connessione {
 
     private LoopListener loopListener;
 
-    public Connessione(String ip, int porta) {
+    public Connessione(String ip, int porta, Utente utente) {
         try {
             this.socket = new Socket(ip, porta);
             this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -28,6 +29,7 @@ public class Connessione {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        this.utente = utente;
         lmfsHasValue = false;
         loopListener = new LoopListener(this);
         loopListener.start(); // Avvio LoopListener
@@ -59,11 +61,13 @@ public class Connessione {
      * @param value inserito dall'utente
      */
     public void sendCmdValue(String cmd, String value) {
+        System.out.println("sendCmdValue(" + cmd + ":" + value + ")");
         try {
             out.writeBytes(cmd + ":" + value + '\n');
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("fine di sendCmdValue()");
     }
 
     protected Socket getSocket() {
@@ -78,4 +82,7 @@ public class Connessione {
         return lasMsgFromServer;
     }
 
+    public Utente getUtente() {
+        return utente;
+    }
 }
