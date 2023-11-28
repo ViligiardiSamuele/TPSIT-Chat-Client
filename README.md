@@ -1,5 +1,7 @@
 ##### Server: [TPSIT-Chat-Server](https://github.com/MatteoFrosinii/ChatServer)
----
+
+# ⚠️Aggiunta l'interfaccia grafica
+
 ## Protocollo Utilizzato
 |Codice                 |Direzione       |Contenuto Data     |Azione                                                                          |
 |-----------------------|----------------|-------------------|--------------------------------------------------------------------------------|
