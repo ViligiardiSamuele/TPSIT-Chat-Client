@@ -10,7 +10,13 @@ public class Utente {
         this.connessione = new Connessione(ip, porta, this);
         actionManager = new ActionManager(connessione);
         connessione.sendCmdValue("hello", nome);
+    }
 
+    public Utente(String ip, int porta) {
+        this.nome = "";
+        this.connessione = new Connessione(ip, porta, this);
+        actionManager = new ActionManager(connessione);
+        connessione.sendCmdValue("hello", nome);
     }
 
     public ActionManager getActionManager() {

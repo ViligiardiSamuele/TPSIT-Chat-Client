@@ -1,8 +1,6 @@
 package me.villo.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 
@@ -18,12 +16,11 @@ public class JF_Main extends JFrame {
 
     public JF_Main() {
         super("Test");
-        setLayout(new GridLayout(3,1));
+        //setLayout(new GridLayout(3,1));
 
         JP_chatMode = new JP_chatMode();
         JP_chats = new JP_chats();
         JP_bar = new JP_bar();
-        JP_chatMode.;
 
         add(JP_chatMode, BorderLayout.PAGE_START);
         add(JP_chats, BorderLayout.CENTER);
