@@ -5,8 +5,8 @@
 |-----------------------|----------------|-------------------|--------------------------------------------------------------------------------|
 |hello                  |Client -> Server|Nome utente        |Invio del nome utente dopo il login                                             |
 |bye                    |Client -> Server|1                  |Notifica al Server l'intenzione di chiudere la connessione                      |
-|usersListRequest       |Client -> Server|1                  |Richiedi la lista di tutti gli utenti online                                    |
-|usersList              |Server -> Client|Nomi utenti        |Risposta del server con la lista degli utenti online es: "Mario;Luigi;Paolo"    |
+|userListRequest        |Client -> Server|1                  |Richiedi la lista di tutti gli utenti online                                    |
+|userList               |Server -> Client|Nomi utenti        |Risposta del server con la lista degli utenti online es: "Mario;Luigi;Paolo"    |
 |switchBroadcast        |Client -> Server|1                  |Notifica al Server l'intenzione di inviare un messaggio in broadcast            |
 |switchToUser           |Client -> Server|Nome destinatario  |Invia il nome del destinatario                                                  |
 |msgRequest             |Server -> Client|1                  |Notifica al client che il server attende il messaggio                           |
