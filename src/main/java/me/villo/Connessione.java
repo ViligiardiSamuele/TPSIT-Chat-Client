@@ -47,6 +47,14 @@ public class Connessione {
         utentiOnline = new String[] {};
     }
 
+    /**
+     * 
+     * @param ip           L'Ip del server
+     * @param porta        La porta del server
+     * @param daemonReader {@link DaemonReader}
+     * @throws UnknownHostException
+     * @throws IOException
+     */
     public Connessione(String ip, int porta, DaemonReader daemonReader) throws UnknownHostException, IOException {
         this.socket = new Socket(ip, porta);
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -94,6 +102,11 @@ public class Connessione {
         }
     }
 
+    /**
+     * verifica che {@link ProtocolCodes}.MSG_REQUEST sia arrivato
+     * 
+     * @return risultato
+     */
     public Boolean checkNewValueOfLMFS() {
         do {
             try {
@@ -115,6 +128,9 @@ public class Connessione {
         return false;
     }
 
+    /**
+     * @param daemonReader {@link DaemonReader}
+     */
     public void setDaemonReader(DaemonReader daemonReader) {
         if (this.daemonReader != null)
             this.daemonReader.interrupt();
@@ -129,8 +145,8 @@ public class Connessione {
 
     public void updateUtentiOnline() {
         sendCmdValue(ProtocolCodes.USERS_LIST_REQUEST, "1");
-        
-        //attende l'aggiornamento
+
+        // attende l'aggiornamento
         do {
             try {
                 /**

@@ -58,10 +58,10 @@ public class DaemonReader extends Thread {
                 msg = (connessione.getIn().readLine()).split(":");
                 if (msg[0].equals(ProtocolCodes.MSG.toString())) {
                     // Stampa messaggio da un utente
-                    print(printTime() + msg[1]);
+                    print(getTime() + msg[1]);
                 } else if (msg[0].equals(ProtocolCodes.MSG_RECIVED_BROADCAST.toString())) {
                     // Stampa messaggio broadcast
-                    print(printTime() + msg[1]);
+                    print(getTime() + msg[1]);
                 } else if (msg[0].equals(ProtocolCodes.USER_LIST.toString())) {
                     /**
                      * Stampa lista client collegati
@@ -76,7 +76,7 @@ public class DaemonReader extends Thread {
                     connessione.setUtentiOnline(clients); // !!--> serve per la GUI
                     connessione.utentiOnlineUpdate = true;
 
-                    if (!useJTAouts) { //stampa su console
+                    if (!useJTAouts) { // stampa su console
                         StringBuilder sb = new StringBuilder();
                         sb.append("--- Client collegati [" + nClients + "] ---\n");
                         for (String client : clients) {
@@ -148,7 +148,10 @@ public class DaemonReader extends Thread {
         this.useJTAouts = useJTAouts;
     }
 
-    public String printTime(){
+    /**
+     * @return {@link String} con [HH:mm:ss]
+     */
+    public String getTime() {
         return "[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "] ";
     }
 }

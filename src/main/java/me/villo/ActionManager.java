@@ -120,11 +120,4 @@ public class ActionManager {
     private String[] deComposeConsoleCommand(String command) {
         return command.trim().split("\\s+");
     }
-
-    /**
-     * <p>
-     * Verifica che il server abbia ricevuto il cambio canale
-     * </p>
-     */
-
 }

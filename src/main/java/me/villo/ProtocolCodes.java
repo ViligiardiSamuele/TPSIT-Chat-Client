@@ -1,5 +1,8 @@
 package me.villo;
 
+/**
+ * Fornisce una lista dei comandi da inviare al server
+ */
 public interface ProtocolCodes {
     /**
      * Invia un messaggio con il nome al server
