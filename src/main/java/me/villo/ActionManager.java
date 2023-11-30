@@ -48,20 +48,28 @@ public class ActionManager {
                     System.out.println("Scrivi per inviare un messaggio nel canase selezionato");
                     break;
                 case "/list":
-                    connessione.sendCmdValue(ProtocolCodes.USERS_LIST_REQUEST.toString(), "1");
+                    connessione.sendCmdValue(ProtocolCodes.USERS_LIST_REQUEST, "1");
                     break;
                 case "/user":
                     if (chechParametro()) {
                         System.out.println("Parametro mancante");
                         break;
                     }
-                    connessione.sendCmdValue(ProtocolCodes.SWITCH_TO_USER.toString(), kbInput[1]);
-                    checkMsgRequest();
+                    connessione.sendCmdValue(ProtocolCodes.SWITCH_TO_USER, kbInput[1]);
+                    System.out.println("Richiesta inviata...");
+                    if (connessione.checkMsgRequest())
+                        System.out.println("Canale cambiato");
+                    else
+                        System.out.println("Errore");
                     canaleSelezionato = true;
                     break;
                 case "/bc":
-                    connessione.sendCmdValue(ProtocolCodes.SWITCH_BROADCAST.toString(), "1");
-                    checkMsgRequest();
+                    connessione.sendCmdValue(ProtocolCodes.SWITCH_BROADCAST, "1");
+                    System.out.println("Richiesta inviata...");
+                    if (connessione.checkMsgRequest())
+                        System.out.println("Canale cambiato");
+                    else
+                        System.out.println("Errore");
                     canaleSelezionato = true;
                     break;
                 case "/exit":
@@ -78,7 +86,7 @@ public class ActionManager {
                 return;
             } else {
                 // Invio messaggio
-                connessione.sendCmdValue(ProtocolCodes.MSG.toString(), cmd);
+                connessione.sendCmdValue(ProtocolCodes.MSG, cmd);
             }
         }
     }
@@ -118,25 +126,5 @@ public class ActionManager {
      * Verifica che il server abbia ricevuto il cambio canale
      * </p>
      */
-    public void checkMsgRequest() {
-        System.out.println("Richiesta inviata...");
-        do {
-            try {
-                /**
-                 * Aspetta 50 ms per consentire a
-                 * LoopListener di aggiornare il buffer
-                 * prima di ritentare
-                 */
-                Thread.sleep(50);
-            } catch (InterruptedException e) {
-            }
-            if (connessione.lmfsHasValue) {
-                if (connessione.lasMsgFromServer[0].equals(ProtocolCodes.MSG_REQUEST.toString())) {
-                    System.out.println("Canale cambiato");
-                    connessione.lmfsHasValue = false;
-                    return;
-                }
-            }
-        } while (!connessione.lmfsHasValue);
-    }
+
 }

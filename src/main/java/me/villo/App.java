@@ -1,5 +1,6 @@
 package me.villo;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 /**
@@ -27,16 +28,19 @@ public class App {
             nome = scanner.nextLine();
         } while (nome.trim().equals(""));
         System.out.println("Creazione utente \"" + nome + "\" connesso a \"" + ip + ":" + porta + "\"");
-        Utente utente = new Utente(nome, ip, porta);
-
-        System.out.println("Scrivi \"/info\" per visualizzare tutti i comandi");
-        String tastiera;
-        do {
+        try {
+            Utente utente = new Utente(nome, ip, porta);
+            System.out.println("Scrivi \"/info\" per visualizzare tutti i comandi");
+            String tastiera;
             do {
-                tastiera = scanner.nextLine();
-            } while (tastiera.trim().equals(""));
-            utente.getActionManager().esegui(tastiera);
-        } while (!tastiera.trim().equals("/exit"));
+                do {
+                    tastiera = scanner.nextLine();
+                } while (tastiera.trim().equals(""));
+                utente.getActionManager().esegui(tastiera);
+            } while (!tastiera.trim().equals("/exit"));
+        } catch (IOException e) {
+            System.out.println("Errore: " + e.getCause());
+        }
         scanner.close();
         System.exit(0);
     }

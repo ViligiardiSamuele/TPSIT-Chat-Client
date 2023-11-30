@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 /**
  * Classe per gestire la connessione
@@ -13,16 +14,20 @@ public class Connessione {
     private Socket socket;
     private BufferedReader in;
     private DataOutputStream out;
-    private Utente utente;
+
+    /** Lista di utenti online (aggiornata da DaemonReader) */
+    private String[] utentiOnline;
 
     /**
      * Buffer su cui il LoopListener
      * scrive tutte le risposte dal server
      */
-    protected String[] lasMsgFromServer;
-    protected Boolean lmfsHasValue; //LastMessageFromServerHasValue
+    protected String[] lasMsgFromServer = null;
 
-    private LoopListener loopListener;
+    /** LastMessageFromServerHasValue */
+    protected Boolean lmfsHasValue;
+
+    private DeamonReader daemonReader = null;
 
     /**
      * Connessione
@@ -30,19 +35,26 @@ public class Connessione {
      * @param ip     L'Ip del server
      * @param porta  La porta del server
      * @param utente Utente associato
+     * @throws IOException
+     * @throws UnknownHostException
      */
-    public Connessione(String ip, int porta, Utente utente) {
-        try {
-            this.socket = new Socket(ip, porta);
-            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            this.out = new DataOutputStream(socket.getOutputStream());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        this.utente = utente;
+    public Connessione(String ip, int porta) throws UnknownHostException, IOException {
+        this.socket = new Socket(ip, porta);
+        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.out = new DataOutputStream(socket.getOutputStream());
         lmfsHasValue = false;
-        loopListener = new LoopListener(this);
-        loopListener.start(); // Avvio LoopListener
+        utentiOnline = new String[] {};
+    }
+
+    public Connessione(String ip, int porta, DeamonReader daemonReader) throws UnknownHostException, IOException {
+        this.socket = new Socket(ip, porta);
+        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        this.out = new DataOutputStream(socket.getOutputStream());
+        lmfsHasValue = false;
+        this.daemonReader = daemonReader;
+        daemonReader.setDaemon(true);
+        daemonReader.start();
+        utentiOnline = new String[] {};
     }
 
     /**
@@ -56,8 +68,8 @@ public class Connessione {
      */
     public void close() {
         try {
-            sendCmdValue(ProtocolCodes.BYE.toString(), "1");
-            loopListener.interrupt();
+            sendCmdValue(ProtocolCodes.BYE, "1");
+            daemonReader.interrupt();
             in.close();
             out.close();
             socket.close();
@@ -80,6 +92,27 @@ public class Connessione {
         }
     }
 
+    public Boolean checkMsgRequest() {
+        do {
+            try {
+                /**
+                 * Aspetta 50 ms per consentire a
+                 * LoopListener di aggiornare il buffer
+                 * prima di ritentare
+                 */
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+            }
+            if (lmfsHasValue) {
+                if (lasMsgFromServer[0].equals(ProtocolCodes.MSG_REQUEST)) {
+                    lmfsHasValue = false;
+                    return true;
+                }
+            }
+        } while (!lmfsHasValue);
+        return false;
+    }
+
     protected Socket getSocket() {
         return socket;
     }
@@ -92,7 +125,23 @@ public class Connessione {
         return lasMsgFromServer;
     }
 
-    public Utente getUtente() {
-        return utente;
+    public void setDaemonReader(DeamonReader daemonReader) {
+        if (this.daemonReader != null)
+            this.daemonReader.interrupt();
+        this.daemonReader = daemonReader;
+        this.daemonReader.setDaemon(true);
+        this.daemonReader.start();
+    }
+
+    public void setUtentiOnline(String[] utentiOnline) {
+        this.utentiOnline = utentiOnline;
+    }
+
+    public void updareUtentiOnline() {
+        sendCmdValue(ProtocolCodes.USERS_LIST_REQUEST, "1");
+    }
+
+    public String[] getUtentiOnline() {
+        return utentiOnline;
     }
 }

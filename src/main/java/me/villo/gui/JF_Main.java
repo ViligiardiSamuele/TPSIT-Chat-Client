@@ -1,48 +1,60 @@
 package me.villo.gui;
 
 import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
 
-import me.villo.gui.components.JP_chatMode;
-import me.villo.gui.components.JP_chats;
-import me.villo.gui.components.JP_bar;
+import me.villo.gui.panels.JP_chatSelector;
+import me.villo.gui.panels.JP_userList;
+import me.villo.gui.panels.JP_chatArea;
+import me.villo.gui.frames.JD_Login;
 
 public class JF_Main extends JFrame {
 
-    private JP_chatMode JP_chatMode;
-    private JP_chats JP_chats;
-    private JP_bar JP_bar;
+    private JP_chatSelector JP_chatMode;
+    private JP_chatArea JP_chatArea;
+    private JP_userList JP_userList;
 
     public JF_Main() {
         super("Test");
-        //setLayout(new GridLayout(3,1));
-
-        JP_chatMode = new JP_chatMode();
-        JP_chats = new JP_chats();
-        JP_bar = new JP_bar();
+        setLayout(new BorderLayout(5, 5));
+        JP_chatArea = new JP_chatArea(this);
+        JP_userList = new JP_userList(this);
+        JP_chatMode = new JP_chatSelector(this);
 
         add(JP_chatMode, BorderLayout.PAGE_START);
-        add(JP_chats, BorderLayout.CENTER);
-        add(JP_bar, BorderLayout.PAGE_END);
+        add(JP_chatArea, BorderLayout.CENTER);
+        add(JP_userList, BorderLayout.LINE_END);
 
         setSize(500, 500);
         setLocationRelativeTo(null);
         setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        //OnClose
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Main.getUtente().getConnessione().close();
+                e.getWindow().dispose();
+            }
+        });
+
         setVisible(true);
+        new JD_Login();
     }
 
-    public JP_chatMode getJP_chatMode() {
+    public JP_chatSelector getJP_chatMode() {
         return JP_chatMode;
     }
 
-    public JP_chats getJP_chats() {
-        return JP_chats;
+    public JP_chatArea getJP_chatArea() {
+        return JP_chatArea;
     }
 
-    public JP_bar getJP_bar() {
-        return JP_bar;
+    public JP_userList getJP_userList() {
+        return JP_userList;
     }
-
+    
 }
