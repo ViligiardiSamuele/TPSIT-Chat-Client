@@ -17,17 +17,17 @@ public class Connessione {
 
     /** Lista di utenti online (aggiornata da DaemonReader) */
     private String[] utentiOnline;
+    protected Boolean utentiOnlineUpdate;
 
     /**
      * Buffer su cui il LoopListener
      * scrive tutte le risposte dal server
      */
     protected String[] lasMsgFromServer = null;
-
     /** LastMessageFromServerHasValue */
     protected Boolean lmfsHasValue;
 
-    private DeamonReader daemonReader = null;
+    private DaemonReader daemonReader = null;
 
     /**
      * Connessione
@@ -43,14 +43,16 @@ public class Connessione {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new DataOutputStream(socket.getOutputStream());
         lmfsHasValue = false;
+        utentiOnlineUpdate = false;
         utentiOnline = new String[] {};
     }
 
-    public Connessione(String ip, int porta, DeamonReader daemonReader) throws UnknownHostException, IOException {
+    public Connessione(String ip, int porta, DaemonReader daemonReader) throws UnknownHostException, IOException {
         this.socket = new Socket(ip, porta);
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new DataOutputStream(socket.getOutputStream());
         lmfsHasValue = false;
+        utentiOnlineUpdate = false;
         this.daemonReader = daemonReader;
         daemonReader.setDaemon(true);
         daemonReader.start();
@@ -92,12 +94,12 @@ public class Connessione {
         }
     }
 
-    public Boolean checkMsgRequest() {
+    public Boolean checkNewValueOfLMFS() {
         do {
             try {
                 /**
                  * Aspetta 50 ms per consentire a
-                 * LoopListener di aggiornare il buffer
+                 * DaemonReader di aggiornare il buffer
                  * prima di ritentare
                  */
                 Thread.sleep(50);
@@ -113,19 +115,7 @@ public class Connessione {
         return false;
     }
 
-    protected Socket getSocket() {
-        return socket;
-    }
-
-    protected BufferedReader getIn() {
-        return in;
-    }
-
-    public String[] getLasMsgFromServer() {
-        return lasMsgFromServer;
-    }
-
-    public void setDaemonReader(DeamonReader daemonReader) {
+    public void setDaemonReader(DaemonReader daemonReader) {
         if (this.daemonReader != null)
             this.daemonReader.interrupt();
         this.daemonReader = daemonReader;
@@ -137,11 +127,41 @@ public class Connessione {
         this.utentiOnline = utentiOnline;
     }
 
-    public void updareUtentiOnline() {
+    public void updateUtentiOnline() {
         sendCmdValue(ProtocolCodes.USERS_LIST_REQUEST, "1");
+        
+        //attende l'aggiornamento
+        do {
+            try {
+                /**
+                 * Aspetta 50 ms per consentire a
+                 * DaemonReader di aggiornare il buffer
+                 * prima di ritentare
+                 */
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+            }
+            if (utentiOnlineUpdate) {
+                if (lasMsgFromServer[0].equals(ProtocolCodes.USER_LIST)) {
+                    utentiOnlineUpdate = false;
+                }
+            }
+        } while (!utentiOnlineUpdate);
     }
 
     public String[] getUtentiOnline() {
         return utentiOnline;
+    }
+
+    protected Socket getSocket() {
+        return socket;
+    }
+
+    protected BufferedReader getIn() {
+        return in;
+    }
+
+    public String[] getLasMsgFromServer() {
+        return lasMsgFromServer;
     }
 }

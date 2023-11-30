@@ -57,7 +57,7 @@ public class ActionManager {
                     }
                     connessione.sendCmdValue(ProtocolCodes.SWITCH_TO_USER, kbInput[1]);
                     System.out.println("Richiesta inviata...");
-                    if (connessione.checkMsgRequest())
+                    if (connessione.checkNewValueOfLMFS())
                         System.out.println("Canale cambiato");
                     else
                         System.out.println("Errore");
@@ -66,7 +66,7 @@ public class ActionManager {
                 case "/bc":
                     connessione.sendCmdValue(ProtocolCodes.SWITCH_BROADCAST, "1");
                     System.out.println("Richiesta inviata...");
-                    if (connessione.checkMsgRequest())
+                    if (connessione.checkNewValueOfLMFS())
                         System.out.println("Canale cambiato");
                     else
                         System.out.println("Errore");

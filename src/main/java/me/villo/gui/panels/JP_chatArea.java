@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import me.villo.DeamonReader;
+import me.villo.DaemonReader;
 import me.villo.ProtocolCodes;
 import me.villo.gui.JF_Main;
 import me.villo.gui.Main;
@@ -29,19 +29,40 @@ public class JP_chatArea extends JPanel {
 
     public JP_chatArea(JF_Main JF_Main) {
         setLayout(new BorderLayout(5, 5));
-        JPanel JP_center = new JPanel(new GridLayout(4, 1, 5, 5));
+        /*
+         * Content Panel
+         * - Center Panel
+         * -- Broadcast Panel
+         * -- Private Panel
+         * - Bottom Panel
+         */
+
+        // CENTER PANEL
+        JPanel JP_center = new JPanel(new GridLayout(2, 1, 5, 5));
+
+        // - BROADCAST PANEL
+        JPanel JP_broadcast = new JPanel(new BorderLayout(5, 5));
         JL_broadcast = new JLabel("Broadcast chat");
-        JL_private = new JLabel("Chat Privata");
-
         JTA_broadcast = new JTextArea();
-        JTA_private = new JTextArea();
-        Main.getUtente().getConnessione().setDaemonReader(new DeamonReader(JTA_broadcast, JTA_private));
-
         JTA_broadcast.setEditable(false);
         JTA_broadcast.setAutoscrolls(true);
+        JP_broadcast.add(JL_broadcast, BorderLayout.PAGE_START);
+        JP_broadcast.add(new JScrollPane(JTA_broadcast), BorderLayout.CENTER);
+        // - BROADCAST PANEL END
 
+        // - PRIVATE PANEL
+        JPanel JP_private = new JPanel(new BorderLayout(5, 5));
+        JL_private = new JLabel("Chat Privata");
+        JTA_private = new JTextArea();
         JTA_private.setEditable(false);
         JTA_private.setAutoscrolls(true);
+        JP_private.add(JL_private, BorderLayout.PAGE_START);
+        JP_private.add(new JScrollPane(JTA_private), BorderLayout.CENTER);
+        // - PRIVATE PANEL END
+
+        JP_center.add(JP_broadcast);
+        JP_center.add(JP_private);
+        // CENTER PANEL END
 
         // PAGE_END
         JPanel JP_bottom = new JPanel(new GridLayout(2, 1, 5, 5));
@@ -58,10 +79,7 @@ public class JP_chatArea extends JPanel {
         JP_bottom.add(JB_send);
         // PAGE_END
 
-        JP_center.add(JL_broadcast);
-        JP_center.add(new JScrollPane(JTA_broadcast));
-        JP_center.add(JL_private);
-        JP_center.add(new JScrollPane(JTA_private));
+        Main.getUtente().getConnessione().setDaemonReader(new DaemonReader(JTA_broadcast, JTA_private));
         add(JP_center, BorderLayout.CENTER);
         add(JP_bottom, BorderLayout.PAGE_END);
     }

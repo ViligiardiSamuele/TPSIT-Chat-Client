@@ -1,5 +1,8 @@
 package me.villo;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.JTextArea;
 
 import me.villo.gui.Main;
@@ -10,7 +13,7 @@ import me.villo.gui.Main;
  * e memorizza tutto sul buffer di quest'ultima
  * </p>
  */
-public class DeamonReader extends Thread {
+public class DaemonReader extends Thread {
 
     private Connessione connessione;
 
@@ -23,7 +26,7 @@ public class DeamonReader extends Thread {
     /** Risposta dal server */
     private String[] msg;
 
-    public DeamonReader() {
+    public DaemonReader() {
         this.connessione = Main.getUtente().getConnessione();
         this.useJTAouts = false;
     }
@@ -33,7 +36,7 @@ public class DeamonReader extends Thread {
      * @param JTA_broadcast {@link JTextArea} per chat di broadcast
      * @param JTA_private   {@link JTextArea} per chat privata
      */
-    public DeamonReader(JTextArea JTA_broadcast, JTextArea JTA_private) {
+    public DaemonReader(JTextArea JTA_broadcast, JTextArea JTA_private) {
         this.connessione = Main.getUtente().getConnessione();
         this.JTA_broadcast = JTA_broadcast;
         this.JTA_private = JTA_private;
@@ -55,10 +58,10 @@ public class DeamonReader extends Thread {
                 msg = (connessione.getIn().readLine()).split(":");
                 if (msg[0].equals(ProtocolCodes.MSG.toString())) {
                     // Stampa messaggio da un utente
-                    print("Messaggio da " + msg[1]);
+                    print(printTime() + msg[1]);
                 } else if (msg[0].equals(ProtocolCodes.MSG_RECIVED_BROADCAST.toString())) {
                     // Stampa messaggio broadcast
-                    print("Messaggio Broadcast: " + msg[1]);
+                    print(printTime() + msg[1]);
                 } else if (msg[0].equals(ProtocolCodes.USER_LIST.toString())) {
                     /**
                      * Stampa lista client collegati
@@ -69,33 +72,42 @@ public class DeamonReader extends Thread {
                     nClients = Integer.parseInt(msg[1].split(";")[0]); // estraggo il numero
                     msg[1] = (msg[1].split(";", 2))[1]; // estraggo gli utenti
                     clients = msg[1].split(";", nClients); // eseguo split n volte per ogni utente
-                    
-                    connessione.setUtentiOnline(clients); //!!--> serve per la GUI
 
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("--- Client collegati [" + nClients + "] ---");
-                    for (String client : clients) {
-                        sb.append("- " + client);
-                        if (client.equals(Main.getUtente().getNome()))
-                            sb.append(" (Tu)");
-                        sb.append("\n");
+                    connessione.setUtentiOnline(clients); // !!--> serve per la GUI
+                    connessione.utentiOnlineUpdate = true;
+
+                    if (!useJTAouts) { //stampa su console
+                        StringBuilder sb = new StringBuilder();
+                        sb.append("--- Client collegati [" + nClients + "] ---\n");
+                        for (String client : clients) {
+                            sb.append("- " + client);
+                            if (client.equals(Main.getUtente().getNome()))
+                                sb.append(" (Tu)");
+                            sb.append("\n");
+                        }
+                        sb.append("----------------------------");
+                        print(sb.toString());
                     }
-                    sb.append("----------------------------");
-                    print(sb.toString());
+
                 } else {
                     // scrive sul buffer
-                    do {
-                        // scrive solo se il buffer è vuoto
-                        if (!connessione.lmfsHasValue) {
-                            connessione.lasMsgFromServer = msg;
-                            connessione.lmfsHasValue = true;
-                            break;
-                        }
-                    } while (connessione.lmfsHasValue);
+                    updateBuffer();
                 }
             } catch (Exception e) {
             }
         }
+    }
+
+    private void updateBuffer() {
+        // scrive sul buffer
+        do {
+            // scrive solo se il buffer è vuoto
+            if (!connessione.lmfsHasValue) {
+                connessione.lasMsgFromServer = msg;
+                connessione.lmfsHasValue = true;
+                break;
+            }
+        } while (connessione.lmfsHasValue);
     }
 
     /**
@@ -113,9 +125,9 @@ public class DeamonReader extends Thread {
     private void print(String messaggio) {
         if (useJTAouts) {
             if (msg[0].equals(ProtocolCodes.MSG_RECIVED_BROADCAST.toString())) {
-                JTA_broadcast.setText(JTA_broadcast.getText() + messaggio);
+                JTA_broadcast.setText(JTA_broadcast.getText() + messaggio + "\n");
             } else {
-                JTA_private.setText(JTA_private.getText() + messaggio);
+                JTA_private.setText(JTA_private.getText() + messaggio + "\n");
             }
         } else {
             System.out.println(messaggio);
@@ -134,5 +146,9 @@ public class DeamonReader extends Thread {
 
     public void setUseJTAouts(Boolean useJTAouts) {
         this.useJTAouts = useJTAouts;
+    }
+
+    public String printTime(){
+        return "[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "] ";
     }
 }

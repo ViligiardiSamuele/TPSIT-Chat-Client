@@ -3,6 +3,8 @@ package me.villo.gui.frames;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -46,7 +48,7 @@ public class JD_Login {
                 } else {
                     Main.getUtente().setNome(JTF_name.getText());
                     Main.getUtente().getConnessione().sendCmdValue(ProtocolCodes.SWITCH_BROADCAST, "1");
-                    if (Main.getUtente().getConnessione().checkMsgRequest()) {
+                    if (Main.getUtente().getConnessione().checkNewValueOfLMFS()) {
                         JL_info.setText("Caricamento...");
                         JD_Login.jDialog.setVisible(false);
                     }
@@ -57,6 +59,7 @@ public class JD_Login {
         JP_button.add(new JLabel());
 
         jDialog.add(JP_button);
+
         jDialog.setSize(340, 100);
         jDialog.setLocationRelativeTo(null);
         jDialog.setResizable(false);

@@ -3,7 +3,9 @@ package me.villo.gui;
 import java.awt.BorderLayout;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.geom.RoundRectangle2D;
 
+import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 
 import me.villo.gui.panels.JP_chatSelector;
@@ -21,8 +23,11 @@ public class JF_Main extends JFrame {
         super("Test");
         setLayout(new BorderLayout(5, 5));
         JP_chatArea = new JP_chatArea(this);
+        JP_chatArea.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         JP_userList = new JP_userList(this);
+        JP_userList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         JP_chatMode = new JP_chatSelector(this);
+        JP_chatMode.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         add(JP_chatMode, BorderLayout.PAGE_START);
         add(JP_chatArea, BorderLayout.CENTER);
@@ -32,12 +37,13 @@ public class JF_Main extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        //OnClose
+        // OnClose
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
                 Main.getUtente().getConnessione().close();
                 e.getWindow().dispose();
+                System.exit(0);
             }
         });
 
@@ -56,5 +62,5 @@ public class JF_Main extends JFrame {
     public JP_userList getJP_userList() {
         return JP_userList;
     }
-    
+
 }
