@@ -18,11 +18,9 @@
 |Codice                 |Direzione       |Contenuto Data     |Azione                                                                          |
 |-----------------------|----------------|-------------------|--------------------------------------------------------------------------------|
 |createUser             |Client -> Server|nomeUtente;password|informazioni di creazione per un nuovo user                                     |
-|createUserStatusOK     |Server -> Client|1                  |user creato con successo                                                        |
-|createUserStatusBAD    |Server -> Client|1                  |user non creato                                                                 |
+|createUserStatus       |Server -> Client|1 o 0              |1 = user creato con successo; 0 = user non creato                               |
 |loginInfo              |Client -> Server|nomeUtente;password|informazioni di login                                                           |
-|loginStatusOK          |Server -> Client|1                  |il login ha avuto successo                                                      |  
-|loginStatusBAD         |Server -> Client|1                  |il login non è stato accettato                                                  |
+|loginStatus            |Server -> Client|1 o 0              |1 = il login ha avuto successo; 0 = il login non ha avuto successo              |  
 |chatRequest            |Client -> Server|1                  |richiede al server la chat con l'user attualmente connesso                      |
 |chatData               |Server -> Client|chat,null          |invio della chat al client, se null vuol dire che è il primo messaggio scritto  |
 
