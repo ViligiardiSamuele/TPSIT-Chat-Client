@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
@@ -18,13 +17,9 @@ public class JP_chatSelector extends JPanel {
     private JRadioButton JRB_broadcast;
     private JRadioButton JRB_private;
     private ButtonGroup BG_chatMode;
-    private JComboBox<String> JCB_destinatario;
 
     public JP_chatSelector(JF_Main JF_Main) {
-        setLayout(new GridLayout(1, 3));
-
-        JCB_destinatario = new JComboBox<String>();
-        JCB_destinatario.setEnabled(false);
+        setLayout(new GridLayout(1, 2));
 
         BG_chatMode = new ButtonGroup();
 
@@ -36,16 +31,15 @@ public class JP_chatSelector extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                JF_Main.getJP_chatArea().getJB_send().setEnabled(false);
+                Main.getJF_Main().getJP_userList().setVisible(false);
                 JF_Main.getJP_chatArea().getJTF_MsgBar().setEnabled(false);
-                JF_Main.getJP_chatArea().getJTF_MsgBar().setText("In attesa della risposta del server...");
+                JF_Main.getJP_chatArea().getJTF_MsgBar().setText("In attesa del server...");
 
                 Main.getUtente().getConnessione().sendCmdValue(ProtocolCodes.SWITCH_BROADCAST, "1");
 
                 if (Main.getUtente().getConnessione().checkNewValueOfLMFS()) {
                     JF_Main.getJP_chatArea().getJTF_MsgBar().setText("");
                     JF_Main.getJP_chatArea().getJTF_MsgBar().setEnabled(true);
-                    JF_Main.getJP_chatArea().getJB_send().setEnabled(true);
                 }
             }
         });
@@ -53,28 +47,7 @@ public class JP_chatSelector extends JPanel {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                JF_Main.getJP_chatArea().getJB_send().setEnabled(false);
-                JF_Main.getJP_chatArea().getJTF_MsgBar().setEnabled(false);
-                JCB_destinatario.setEnabled(true);
-                JF_Main.getJP_chatArea().getJTF_MsgBar().setText("In attesa della risposta del server...");
-            }
-        });
-
-        JCB_destinatario.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                if (!JCB_destinatario.getSelectedItem().equals("")) {
-                    Main.getUtente().getConnessione().sendCmdValue(ProtocolCodes.SWITCH_TO_USER,
-                            (String) JCB_destinatario.getSelectedItem());
-                    if (Main.getUtente().getConnessione().checkNewValueOfLMFS()) {
-                        JF_Main.getJP_chatArea().getJL_private()
-                                .setText("Privata [" + JCB_destinatario.getSelectedItem() + "]");
-                        JF_Main.getJP_chatArea().getJTA_private().setText("");
-                        JF_Main.getJP_chatArea().getJTF_MsgBar().setText("");
-                        JF_Main.getJP_chatArea().getJTF_MsgBar().setEnabled(true);
-                        JF_Main.getJP_chatArea().getJB_send().setEnabled(true);
-                    }
-                }
+                Main.getJF_Main().getJP_userList().setVisible(true);
             }
         });
 
@@ -83,7 +56,6 @@ public class JP_chatSelector extends JPanel {
 
         add(JRB_broadcast);
         add(JRB_private);
-        add(JCB_destinatario);
     }
 
     public JRadioButton getJRB_broadcast() {
@@ -96,9 +68,5 @@ public class JP_chatSelector extends JPanel {
 
     public ButtonGroup getBG_chatMode() {
         return BG_chatMode;
-    }
-
-    public JComboBox<String> getJCB_destinatario() {
-        return JCB_destinatario;
     }
 }

@@ -12,8 +12,6 @@ public class Utente {
     /** {@link Connessione} singola per ogni utente */
     private Connessione connessione;
 
-    /** {@link ActionManager} */
-    private ActionManager actionManager;
 
     /**
      * 
@@ -23,10 +21,9 @@ public class Utente {
      * @throws UnknownHostException
      * @throws IOException
      */
-    public Utente(String nome, String ip, int porta) throws UnknownHostException, IOException {
+    public Utente(String nome, String ip, int porta) throws UnknownHostException, IOException{
         this.nome = nome;
         this.connessione = new Connessione(ip, porta);
-        actionManager = new ActionManager(connessione);
         connessione.sendCmdValue("hello", nome);
     }
 
@@ -39,7 +36,6 @@ public class Utente {
      */
     public Utente(String ip, int porta) throws UnknownHostException, IOException {
         this.connessione = new Connessione(ip, porta);
-        actionManager = new ActionManager(connessione);
     }
 
     /**
@@ -52,7 +48,6 @@ public class Utente {
     public Utente(String nome, Connessione connessione) throws UnknownHostException, IOException {
         this.nome = nome;
         this.connessione = connessione;
-        actionManager = new ActionManager(connessione);
         connessione.sendCmdValue("hello", nome);
     }
 
@@ -64,11 +59,6 @@ public class Utente {
      */
     public Utente(Connessione connessione) throws UnknownHostException, IOException {
         this.connessione = connessione;
-        actionManager = new ActionManager(connessione);
-    }
-
-    public ActionManager getActionManager() {
-        return actionManager;
     }
 
     public String getNome() {

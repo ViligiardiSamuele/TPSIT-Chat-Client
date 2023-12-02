@@ -3,6 +3,8 @@ package me.villo.gui.frames;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,15 +46,24 @@ public class JD_Login {
                 } else if (JTF_name.getText().trim().equals("BROADCAST") || matcher.find()) {
                     JL_info.setText("ERRORE: Questo nome non è consentito");
                 } else {
+                    JL_info.setText("In attesa del server...");
                     Main.getUtente().setNome(JTF_name.getText());
                     Main.getUtente().getConnessione().sendCmdValue(ProtocolCodes.SWITCH_BROADCAST, "1");
                     if (Main.getUtente().getConnessione().checkNewValueOfLMFS()) {
-                        JL_info.setText("Caricamento...");
                         JD_Login.jDialog.setVisible(false);
                     }
                 }
             }
         });
+
+        jDialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                Main.getUtente().getConnessione().close();
+                System.exit(0);
+            }
+        });
+        
         JP_button.add(JB_Login);
         JP_button.add(new JLabel());
 

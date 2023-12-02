@@ -50,12 +50,12 @@ public class DaemonReader extends Thread {
      */
     @Override
     public void run() {
-        String[] clients;
-        int nClients;
+        String[] temp_Array;
+        int n;
         while (connessione.getSocket().isConnected()) {
             try {
                 // messaggio ricevuto dal server
-                msg = (connessione.getIn().readLine()).split(":");
+                msg = (connessione.getIn().readLine()).split(":", 2);
                 if (msg[0].equals(ProtocolCodes.MSG.toString())) {
                     // Stampa messaggio da un utente
                     print(getTime() + msg[1]);
@@ -69,17 +69,26 @@ public class DaemonReader extends Thread {
                      * "user_list : 2; mario; pippo;"
                      * 2 = numero di utenti contenuti
                      */
-                    nClients = Integer.parseInt(msg[1].split(";")[0]); // estraggo il numero
+                    n = Integer.parseInt(msg[1].split(";")[0]); // estraggo il numero
                     msg[1] = (msg[1].split(";", 2))[1]; // estraggo gli utenti
-                    clients = msg[1].split(";", nClients); // eseguo split n volte per ogni utente
+                    temp_Array = msg[1].split(";", n); // eseguo split n volte per ogni utente
 
-                    connessione.setUtentiOnline(clients); // !!--> serve per la GUI
-                    connessione.utentiOnlineUpdate = true;
+                    // connessione.setUtentiOnline(temp_Array); // !!--> serve per la GUI
+                    // connessione.utentiOnlineUpdate = true;
+
+                    Main.getJF_Main().getJP_userList().getJL_utentiOnline().removeAll();
+
+                    for (int i = 0; i < temp_Array.length; i++)
+                        if (Main.getUtente().getNome().equals(temp_Array[i]))
+                            temp_Array[i] += " (Tu)";
+
+                    // inserisce nella JList
+                    Main.getJF_Main().getJP_userList().getJL_utentiOnline().setListData(temp_Array);
 
                     if (!useJTAouts) { // stampa su console
                         StringBuilder sb = new StringBuilder();
-                        sb.append("--- Client collegati [" + nClients + "] ---\n");
-                        for (String client : clients) {
+                        sb.append("--- Client collegati [" + n + "] ---\n");
+                        for (String client : temp_Array) {
                             sb.append("- " + client);
                             if (client.equals(Main.getUtente().getNome()))
                                 sb.append(" (Tu)");
@@ -88,7 +97,17 @@ public class DaemonReader extends Thread {
                         sb.append("----------------------------");
                         print(sb.toString());
                     }
+                } else if (msg[0].equals(ProtocolCodes.CHAT_DATA.toString())) {
+                    // stampa lo storico della chat ricevuta dal server
 
+                    n = Integer.parseInt(msg[1].split(";")[0]); // estraggo il numero
+                    msg[1] = (msg[1].split(";", 2))[1]; // estraggo i messaggi
+                    temp_Array = msg[1].split(";", n); // eseguo split n volte per ogni messaggio
+
+                    // stampo i messaggi in JTA_private
+                    for (String messaggio : temp_Array) {
+                        print(messaggio);
+                    }
                 } else {
                     // scrive sul buffer
                     updateBuffer();

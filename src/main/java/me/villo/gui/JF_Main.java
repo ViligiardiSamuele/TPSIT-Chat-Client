@@ -19,12 +19,13 @@ public class JF_Main extends JFrame {
     private JP_userList JP_userList;
 
     public JF_Main() {
-        super("Test");
+        super("Chat");
         setLayout(new BorderLayout(5, 5));
-        JP_chatArea = new JP_chatArea(this);
+        JP_chatArea = new JP_chatArea();
         JP_chatArea.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        JP_userList = new JP_userList(this);
+        JP_userList = new JP_userList();
         JP_userList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        JP_userList.setVisible(false);
         JP_chatMode = new JP_chatSelector(this);
         JP_chatMode.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 

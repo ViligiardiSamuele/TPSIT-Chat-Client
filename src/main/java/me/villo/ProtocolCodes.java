@@ -40,4 +40,12 @@ public interface ProtocolCodes {
      * Messaggio broadcast ricevuto dal client
      */
     String MSG_RECIVED_BROADCAST = "msgRecivedBroadcast";
+    /**
+     * Messaggio broadcast ricevuto dal client
+     */
+    String CHAT_REQUEST = "chatRequest";
+    /**
+     * Messaggio broadcast ricevuto dal client
+     */
+    String CHAT_DATA = "chatData";
 }

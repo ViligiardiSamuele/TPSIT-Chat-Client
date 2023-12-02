@@ -16,8 +16,8 @@ public class Connessione {
     private DataOutputStream out;
 
     /** Lista di utenti online (aggiornata da DaemonReader) */
-    private String[] utentiOnline;
-    protected Boolean utentiOnlineUpdate;
+    //private String[] utentiOnline;
+    //protected Boolean utentiOnlineUpdate;
 
     /**
      * Buffer su cui il LoopListener
@@ -43,8 +43,8 @@ public class Connessione {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new DataOutputStream(socket.getOutputStream());
         lmfsHasValue = false;
-        utentiOnlineUpdate = false;
-        utentiOnline = new String[] {};
+        //utentiOnlineUpdate = false;
+        //utentiOnline = new String[] {};
     }
 
     /**
@@ -60,11 +60,11 @@ public class Connessione {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new DataOutputStream(socket.getOutputStream());
         lmfsHasValue = false;
-        utentiOnlineUpdate = false;
+        //utentiOnlineUpdate = false;
         this.daemonReader = daemonReader;
         daemonReader.setDaemon(true);
         daemonReader.start();
-        utentiOnline = new String[] {};
+        //utentiOnline = new String[] {};
     }
 
     /**
@@ -139,10 +139,11 @@ public class Connessione {
         this.daemonReader.start();
     }
 
-    public void setUtentiOnline(String[] utentiOnline) {
+    /*public void setUtentiOnline(String[] utentiOnline) {
         this.utentiOnline = utentiOnline;
-    }
+    }*/
 
+    /*
     public void updateUtentiOnline() {
         sendCmdValue(ProtocolCodes.USERS_LIST_REQUEST, "1");
 
@@ -153,7 +154,6 @@ public class Connessione {
                  * Aspetta 50 ms per consentire a
                  * DaemonReader di aggiornare il buffer
                  * prima di ritentare
-                 */
                 Thread.sleep(50);
             } catch (InterruptedException e) {
             }
@@ -163,11 +163,12 @@ public class Connessione {
                 }
             }
         } while (!utentiOnlineUpdate);
-    }
+    }*/
 
+    /*
     public String[] getUtentiOnline() {
         return utentiOnline;
-    }
+    }*/
 
     protected Socket getSocket() {
         return socket;
