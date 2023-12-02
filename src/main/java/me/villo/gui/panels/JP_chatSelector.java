@@ -69,6 +69,7 @@ public class JP_chatSelector extends JPanel {
                     if (Main.getUtente().getConnessione().checkNewValueOfLMFS()) {
                         JF_Main.getJP_chatArea().getJL_private()
                                 .setText("Privata [" + JCB_destinatario.getSelectedItem() + "]");
+                        JF_Main.getJP_chatArea().getJTA_private().setText("");
                         JF_Main.getJP_chatArea().getJTF_MsgBar().setText("");
                         JF_Main.getJP_chatArea().getJTF_MsgBar().setEnabled(true);
                         JF_Main.getJP_chatArea().getJB_send().setEnabled(true);

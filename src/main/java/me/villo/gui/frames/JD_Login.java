@@ -24,11 +24,12 @@ public class JD_Login {
         jDialog = new JDialog(new JFrame(), "Login", true);
         jDialog.setLayout(new GridLayout(3, 1));
 
-        JLabel JL_utente = new JLabel("Nome utente");
+        JLabel JL_info = new JLabel("Inserisci il nome");
+        jDialog.add(JL_info);
 
         JTextField JTF_name = new JTextField();
+        jDialog.add(JTF_name);
 
-        // BUTTON
         JPanel JP_button = new JPanel(new GridLayout(1, 3));
         JP_button.add(new JLabel());
         JButton JB_Login = new JButton("Login");
@@ -39,14 +40,14 @@ public class JD_Login {
                 Matcher matcher = Pattern.compile("[/:*?<>|]").matcher(JTF_name.getText().trim());
 
                 if (JTF_name.getText().trim().length() < 2) {
-                    JL_utente.setText("ERRORE: il nome deve essere lungo almeno 2 caratteri");
+                    JL_info.setText("ERRORE: il nome deve essere lungo almeno 2 caratteri");
                 } else if (JTF_name.getText().trim().equals("BROADCAST") || matcher.find()) {
-                    JL_utente.setText("ERRORE: Questo nome non è consentito");
+                    JL_info.setText("ERRORE: Questo nome non è consentito");
                 } else {
                     Main.getUtente().setNome(JTF_name.getText());
                     Main.getUtente().getConnessione().sendCmdValue(ProtocolCodes.SWITCH_BROADCAST, "1");
                     if (Main.getUtente().getConnessione().checkNewValueOfLMFS()) {
-                        JL_utente.setText("Caricamento...");
+                        JL_info.setText("Caricamento...");
                         JD_Login.jDialog.setVisible(false);
                     }
                 }
@@ -54,7 +55,6 @@ public class JD_Login {
         });
         JP_button.add(JB_Login);
         JP_button.add(new JLabel());
-        // BUTTON END
 
         jDialog.add(JP_button);
 
