@@ -11,6 +11,9 @@ import me.villo.gui.panels.JP_chatSelector;
 import me.villo.gui.panels.JP_userList;
 import me.villo.gui.panels.JP_chatArea;
 
+/**
+ * @author Viligiardi Samuele
+ */
 public class JF_Main extends JFrame {
 
     private JP_chatSelector JP_chatMode;
@@ -35,7 +38,7 @@ public class JF_Main extends JFrame {
         setLocationRelativeTo(null);
         setResizable(false);
 
-        // OnClose
+        // Alla chiususa
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {

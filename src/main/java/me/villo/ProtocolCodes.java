@@ -2,6 +2,8 @@ package me.villo;
 
 /**
  * Fornisce una lista dei comandi da inviare al server
+ * @author Viligiardi Samuele
+ * @author Frosini Matteo
  */
 public interface ProtocolCodes {
     /**

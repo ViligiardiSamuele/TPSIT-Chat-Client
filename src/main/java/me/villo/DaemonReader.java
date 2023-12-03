@@ -12,6 +12,8 @@ import me.villo.gui.Main;
  * Rimane costantemente in ascolto sulla connessione
  * e memorizza tutto sul buffer di quest'ultima
  * </p>
+ * 
+ * @author Viligiardi Samuele
  */
 public class DaemonReader extends Thread {
 
@@ -88,12 +90,11 @@ public class DaemonReader extends Thread {
                     for (String messaggio : temp_Array) {
                         print(messaggio);
                     }
-                } else if (msg[0].equals(ProtocolCodes.BYE.toString())){
+                } else if (msg[0].equals(ProtocolCodes.BYE.toString())) {
                     System.out.println("Connessione in chiusura (richiesto dal server)");
                     connessione.close();
                     Thread.currentThread().interrupt();
-                }
-                else {
+                } else {
                     // scrive sul buffer
                     do {
                         // scrive solo se il buffer è vuoto

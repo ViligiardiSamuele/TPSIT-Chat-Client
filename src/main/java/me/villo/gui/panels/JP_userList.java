@@ -8,9 +8,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import me.villo.ProtocolCodes;
-import me.villo.gui.JF_Main;
 import me.villo.gui.Main;
 
+/**
+ * @author Viligiardi Samuele
+ */
 public class JP_userList extends JPanel implements ListSelectionListener {
 
     private JList<String> JL_utentiOnline;

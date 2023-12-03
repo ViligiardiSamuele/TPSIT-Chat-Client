@@ -1,3 +1,4 @@
+
 package me.villo.gui.frames;
 
 import java.awt.GridLayout;
@@ -17,8 +18,10 @@ import javax.swing.JTextField;
 
 import me.villo.ProtocolCodes;
 import me.villo.gui.Main;
-import me.villo.gui.panels.JP_userList;
 
+/**
+ * @author Viligiardi Samuele
+ */
 public class JD_Login {
 
     private static JDialog jDialog;
@@ -47,6 +50,7 @@ public class JD_Login {
                 } else if (JTF_name.getText().trim().equals("BROADCAST") || matcher.find()) {
                     JL_info.setText("ERRORE: Questo nome non è consentito");
                 } else {
+                    //Nome accettato
                     try {
                         JL_info.setText("In attesa del server...");
                         Main.getUtente().setNome(JTF_name.getText());

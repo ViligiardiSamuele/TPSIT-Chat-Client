@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 /**
- * Classe per gestire la connessione
+ * @author Viligiardi Samuele
  */
 public class Connessione {
     private Socket socket;

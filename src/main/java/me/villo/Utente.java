@@ -4,6 +4,7 @@ import me.villo.gui.Main;
 
 /**
  * Classe POJO Utente
+ * @author Viligiardi Samuele
  */
 public class Utente {
     private String nome;

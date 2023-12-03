@@ -16,6 +16,10 @@ import java.awt.event.KeyListener;
 import me.villo.ProtocolCodes;
 import me.villo.gui.Main;
 
+
+/**
+ * @author Viligiardi Samuele
+ */
 public class JP_chatArea extends JPanel {
 
     private JTextArea JTA_broadcast;
