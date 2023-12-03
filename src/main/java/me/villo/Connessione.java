@@ -16,8 +16,8 @@ public class Connessione {
     private DataOutputStream out;
 
     /** Lista di utenti online (aggiornata da DaemonReader) */
-    //private String[] utentiOnline;
-    //protected Boolean utentiOnlineUpdate;
+    private String[] utentiOnline;
+    protected Boolean utentiOnlineUpdate;
 
     /**
      * Buffer su cui il LoopListener
@@ -43,28 +43,8 @@ public class Connessione {
         this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         this.out = new DataOutputStream(socket.getOutputStream());
         lmfsHasValue = false;
-        //utentiOnlineUpdate = false;
-        //utentiOnline = new String[] {};
-    }
-
-    /**
-     * 
-     * @param ip           L'Ip del server
-     * @param porta        La porta del server
-     * @param daemonReader {@link DaemonReader}
-     * @throws UnknownHostException
-     * @throws IOException
-     */
-    public Connessione(String ip, int porta, DaemonReader daemonReader) throws UnknownHostException, IOException {
-        this.socket = new Socket(ip, porta);
-        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        this.out = new DataOutputStream(socket.getOutputStream());
-        lmfsHasValue = false;
-        //utentiOnlineUpdate = false;
-        this.daemonReader = daemonReader;
-        daemonReader.setDaemon(true);
-        daemonReader.start();
-        //utentiOnline = new String[] {};
+        utentiOnlineUpdate = false;
+        utentiOnline = new String[] {};
     }
 
     /**
@@ -139,14 +119,12 @@ public class Connessione {
         this.daemonReader.start();
     }
 
-    /*public void setUtentiOnline(String[] utentiOnline) {
+    public void setUtentiOnline(String[] utentiOnline) {
         this.utentiOnline = utentiOnline;
-    }*/
+    }
 
-    /*
     public void updateUtentiOnline() {
         sendCmdValue(ProtocolCodes.USERS_LIST_REQUEST, "1");
-
         // attende l'aggiornamento
         do {
             try {
@@ -154,21 +132,22 @@ public class Connessione {
                  * Aspetta 50 ms per consentire a
                  * DaemonReader di aggiornare il buffer
                  * prima di ritentare
+                 */
                 Thread.sleep(50);
             } catch (InterruptedException e) {
             }
             if (utentiOnlineUpdate) {
                 if (lasMsgFromServer[0].equals(ProtocolCodes.USER_LIST)) {
                     utentiOnlineUpdate = false;
+                    return;
                 }
             }
         } while (!utentiOnlineUpdate);
-    }*/
+    }
 
-    /*
     public String[] getUtentiOnline() {
         return utentiOnline;
-    }*/
+    }
 
     protected Socket getSocket() {
         return socket;

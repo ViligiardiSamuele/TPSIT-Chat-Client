@@ -24,7 +24,7 @@ public class JD_Login {
 
     public JD_Login() {
         jDialog = new JDialog(new JFrame(), "Login", true);
-        jDialog.setLayout(new GridLayout(3, 1));
+        jDialog.setLayout(new GridLayout(3, 1, 5, 5));
 
         JLabel JL_info = new JLabel("Inserisci il nome");
         jDialog.add(JL_info);
@@ -46,12 +46,17 @@ public class JD_Login {
                 } else if (JTF_name.getText().trim().equals("BROADCAST") || matcher.find()) {
                     JL_info.setText("ERRORE: Questo nome non è consentito");
                 } else {
-                    JL_info.setText("In attesa del server...");
-                    Main.getUtente().setNome(JTF_name.getText());
-                    Main.getUtente().getConnessione().sendCmdValue(ProtocolCodes.SWITCH_BROADCAST, "1");
-                    if (Main.getUtente().getConnessione().checkNewValueOfLMFS()) {
-                        JD_Login.jDialog.setVisible(false);
+                    try {
+                        JL_info.setText("In attesa del server...");
+                        Main.getUtente().setNome(JTF_name.getText());
+                        Main.getConnessione().sendCmdValue(ProtocolCodes.SWITCH_BROADCAST, "1");
+                        //if (Main.getConnessione().checkNewValueOfLMFS()) {
+                            JD_Login.jDialog.setVisible(false);
+                        //}
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+
                 }
             }
         });
@@ -59,11 +64,11 @@ public class JD_Login {
         jDialog.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosed(WindowEvent e) {
-                Main.getUtente().getConnessione().close();
+                Main.getConnessione().close();
                 System.exit(0);
             }
         });
-        
+
         JP_button.add(JB_Login);
         JP_button.add(new JLabel());
 

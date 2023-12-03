@@ -21,26 +21,19 @@ public class DaemonReader extends Thread {
     private JTextArea JTA_broadcast, JTA_private;
 
     /** Specifica dove direzionare le stampe */
-    private Boolean useJTAouts;
 
     /** Risposta dal server */
     private String[] msg;
-
-    public DaemonReader() {
-        this.connessione = Main.getUtente().getConnessione();
-        this.useJTAouts = false;
-    }
 
     /**
      * 
      * @param JTA_broadcast {@link JTextArea} per chat di broadcast
      * @param JTA_private   {@link JTextArea} per chat privata
      */
-    public DaemonReader(JTextArea JTA_broadcast, JTextArea JTA_private) {
-        this.connessione = Main.getUtente().getConnessione();
-        this.JTA_broadcast = JTA_broadcast;
-        this.JTA_private = JTA_private;
-        this.useJTAouts = true;
+    public DaemonReader() {
+        this.connessione = Main.getConnessione();
+        this.JTA_broadcast = Main.getJF_Main().getJP_chatArea().getJTA_broadcast();
+        this.JTA_private = Main.getJF_Main().getJP_chatArea().getJTA_private();
     }
 
     /**
@@ -73,8 +66,8 @@ public class DaemonReader extends Thread {
                     msg[1] = (msg[1].split(";", 2))[1]; // estraggo gli utenti
                     temp_Array = msg[1].split(";", n); // eseguo split n volte per ogni utente
 
-                    // connessione.setUtentiOnline(temp_Array); // !!--> serve per la GUI
-                    // connessione.utentiOnlineUpdate = true;
+                    connessione.setUtentiOnline(temp_Array); // !!--> serve per la GUI
+                    connessione.utentiOnlineUpdate = true;
 
                     Main.getJF_Main().getJP_userList().getJL_utentiOnline().removeAll();
 
@@ -85,18 +78,6 @@ public class DaemonReader extends Thread {
                     // inserisce nella JList
                     Main.getJF_Main().getJP_userList().getJL_utentiOnline().setListData(temp_Array);
 
-                    if (!useJTAouts) { // stampa su console
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("--- Client collegati [" + n + "] ---\n");
-                        for (String client : temp_Array) {
-                            sb.append("- " + client);
-                            if (client.equals(Main.getUtente().getNome()))
-                                sb.append(" (Tu)");
-                            sb.append("\n");
-                        }
-                        sb.append("----------------------------");
-                        print(sb.toString());
-                    }
                 } else if (msg[0].equals(ProtocolCodes.CHAT_DATA.toString())) {
                     // stampa lo storico della chat ricevuta dal server
 
@@ -104,52 +85,38 @@ public class DaemonReader extends Thread {
                     msg[1] = (msg[1].split(";", 2))[1]; // estraggo i messaggi
                     temp_Array = msg[1].split(";", n); // eseguo split n volte per ogni messaggio
 
-                    // stampo i messaggi in JTA_private
                     for (String messaggio : temp_Array) {
                         print(messaggio);
                     }
-                } else {
+                } else if (msg[0].equals(ProtocolCodes.BYE.toString())){
+                    System.out.println("Connessione in chiusura (richiesto dal server)");
+                    connessione.close();
+                    Thread.currentThread().interrupt();
+                }
+                else {
                     // scrive sul buffer
-                    updateBuffer();
+                    do {
+                        // scrive solo se il buffer è vuoto
+                        if (!connessione.lmfsHasValue) {
+                            connessione.lasMsgFromServer = msg;
+                            connessione.lmfsHasValue = true;
+                            break;
+                        }
+                    } while (connessione.lmfsHasValue);
                 }
             } catch (Exception e) {
             }
         }
     }
 
-    private void updateBuffer() {
-        // scrive sul buffer
-        do {
-            // scrive solo se il buffer è vuoto
-            if (!connessione.lmfsHasValue) {
-                connessione.lasMsgFromServer = msg;
-                connessione.lmfsHasValue = true;
-                break;
-            }
-        } while (connessione.lmfsHasValue);
-    }
-
     /**
-     * <p>
-     * Stampa il messaggio in base al tipo di utilizzo
-     * </p>
-     * <ul>
-     * <li>GUI</li>
-     * <li>CLI</li>
-     * </ul>
-     * ------
-     * 
      * @param messaggio messaggio da stampare
      */
     private void print(String messaggio) {
-        if (useJTAouts) {
-            if (msg[0].equals(ProtocolCodes.MSG_RECIVED_BROADCAST.toString())) {
-                JTA_broadcast.setText(JTA_broadcast.getText() + messaggio + "\n");
-            } else {
-                JTA_private.setText(JTA_private.getText() + messaggio + "\n");
-            }
+        if (msg[0].equals(ProtocolCodes.MSG_RECIVED_BROADCAST.toString())) {
+            JTA_broadcast.setText(JTA_broadcast.getText() + messaggio + "\n");
         } else {
-            System.out.println(messaggio);
+            JTA_private.setText(JTA_private.getText() + messaggio + "\n");
         }
     }
 
@@ -160,11 +127,6 @@ public class DaemonReader extends Thread {
     public void setJTA_broadcast(JTextArea jTA_broadcast, JTextArea jTA_private) {
         JTA_broadcast = jTA_broadcast;
         JTA_private = jTA_private;
-        this.useJTAouts = true;
-    }
-
-    public void setUseJTAouts(Boolean useJTAouts) {
-        this.useJTAouts = useJTAouts;
     }
 
     /**

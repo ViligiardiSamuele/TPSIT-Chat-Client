@@ -10,7 +10,6 @@ import javax.swing.JFrame;
 import me.villo.gui.panels.JP_chatSelector;
 import me.villo.gui.panels.JP_userList;
 import me.villo.gui.panels.JP_chatArea;
-import me.villo.gui.frames.JD_Login;
 
 public class JF_Main extends JFrame {
 
@@ -41,14 +40,13 @@ public class JF_Main extends JFrame {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                Main.getUtente().getConnessione().close();
+                Main.getConnessione().close();
                 e.getWindow().dispose();
                 System.exit(0);
             }
         });
 
         setVisible(true);
-        new JD_Login();
     }
 
     public JP_chatSelector getJP_chatMode() {

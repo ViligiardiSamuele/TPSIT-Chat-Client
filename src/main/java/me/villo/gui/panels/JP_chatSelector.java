@@ -35,12 +35,14 @@ public class JP_chatSelector extends JPanel {
                 JF_Main.getJP_chatArea().getJTF_MsgBar().setEnabled(false);
                 JF_Main.getJP_chatArea().getJTF_MsgBar().setText("In attesa del server...");
 
-                Main.getUtente().getConnessione().sendCmdValue(ProtocolCodes.SWITCH_BROADCAST, "1");
+                Main.getConnessione().sendCmdValue(ProtocolCodes.SWITCH_BROADCAST, "1");
 
-                if (Main.getUtente().getConnessione().checkNewValueOfLMFS()) {
+                if (Main.getConnessione().checkNewValueOfLMFS()) {
                     JF_Main.getJP_chatArea().getJTF_MsgBar().setText("");
                     JF_Main.getJP_chatArea().getJTF_MsgBar().setEnabled(true);
                 }
+                Main.getJF_Main()
+                        .setTitle("Chat - " + Main.getUtente().getNome() + " -> Broadcast");
             }
         });
         JRB_private.addActionListener(new ActionListener() {

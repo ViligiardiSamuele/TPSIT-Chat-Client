@@ -12,8 +12,9 @@ import javax.swing.text.DefaultCaret;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-import me.villo.DaemonReader;
 import me.villo.ProtocolCodes;
 import me.villo.gui.Main;
 
@@ -78,7 +79,7 @@ public class JP_chatArea extends JPanel {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER
                         && !JTF_MsgBar.getText().equals("")
                         && JTF_MsgBar.getText() != null) {
-                    Main.getUtente().getConnessione().sendCmdValue(ProtocolCodes.MSG, JTF_MsgBar.getText());
+                    Main.getConnessione().sendCmdValue(ProtocolCodes.MSG, JTF_MsgBar.getText());
                     JTF_MsgBar.setText("");
                 }
             }
@@ -94,7 +95,6 @@ public class JP_chatArea extends JPanel {
         JP_bottom.add(JTF_MsgBar);
         // - BOTTOM PANEL END
 
-        Main.getUtente().getConnessione().setDaemonReader(new DaemonReader(JTA_broadcast, JTA_private));
         add(JP_center, BorderLayout.CENTER);
         add(JP_bottom, BorderLayout.PAGE_END);
     }
