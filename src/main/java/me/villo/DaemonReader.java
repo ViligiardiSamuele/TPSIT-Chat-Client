@@ -134,6 +134,6 @@ public class DaemonReader extends Thread {
      * @return {@link String} con [HH:mm:ss]
      */
     public String getTime() {
-        return "[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")) + "] ";
+        return "[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")) + "]";
     }
 }

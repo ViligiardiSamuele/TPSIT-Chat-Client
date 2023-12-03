@@ -31,7 +31,9 @@ public class JP_userList extends JPanel implements ListSelectionListener {
     @Override
     public void valueChanged(ListSelectionEvent e) {
         try {
-            if (!JL_utentiOnline.getSelectedValue().contains(" (Tu)")) {
+            if (!JL_utentiOnline.getSelectedValue().contains(" (Tu)")
+            && !Main.getUtente().getDestinatario().equals(JL_utentiOnline.getSelectedValue())) {
+                Main.getUtente().setDestinatario(JL_utentiOnline.getSelectedValue());
                 Main.getJF_Main().getJP_chatMode().getJRB_broadcast().setSelected(false);
                 Main.getConnessione().sendCmdValue(ProtocolCodes.SWITCH_TO_USER,
                         JL_utentiOnline.getSelectedValue());
@@ -48,6 +50,7 @@ public class JP_userList extends JPanel implements ListSelectionListener {
                 }
             }
         } catch (Exception ex) {
+            //ex.printStackTrace();
         }
 
     }

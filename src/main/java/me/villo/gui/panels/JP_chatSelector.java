@@ -43,6 +43,7 @@ public class JP_chatSelector extends JPanel {
                 Main.getJF_Main()
                         .setTitle("Chat - " + Main.getUtente().getNome() + " -> Broadcast");
                 Main.getJF_Main().getJP_userList().getJL_utentiOnline().clearSelection();
+                Main.getUtente().setDestinatario("");
             }
         });
         add(JRB_broadcast);

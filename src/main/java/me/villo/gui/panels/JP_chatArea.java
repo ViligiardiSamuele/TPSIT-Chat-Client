@@ -12,10 +12,11 @@ import javax.swing.text.DefaultCaret;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import me.villo.ProtocolCodes;
 import me.villo.gui.Main;
-
 
 /**
  * @author Viligiardi Samuele
@@ -82,6 +83,14 @@ public class JP_chatArea extends JPanel {
                         && !JTF_MsgBar.getText().equals("")
                         && JTF_MsgBar.getText() != null) {
                     Main.getConnessione().sendCmdValue(ProtocolCodes.MSG, JTF_MsgBar.getText());
+
+                    StringBuilder sb = new StringBuilder();
+                    if (!Main.getJF_Main().getJP_chatMode().getJRB_broadcast().isSelected()) {
+                        sb.append(Main.getJF_Main().getJP_chatArea().getJTA_private().getText());
+                        sb.append("[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH-mm-ss")) + "]");
+                        sb.append("[" + Main.getUtente().getNome() + "] " + JTF_MsgBar.getText() + "\n");
+                        Main.getJF_Main().getJP_chatArea().getJTA_private().setText(sb.toString());
+                    }
                     JTF_MsgBar.setText("");
                 }
             }

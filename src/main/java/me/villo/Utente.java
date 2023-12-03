@@ -4,12 +4,15 @@ import me.villo.gui.Main;
 
 /**
  * Classe POJO Utente
+ * 
  * @author Viligiardi Samuele
  */
 public class Utente {
     private String nome;
-    
+    private String destinatario;
+
     public Utente() {
+        this.destinatario = "";
     }
 
     public String getNome() {
@@ -20,5 +23,13 @@ public class Utente {
         this.nome = nome;
         // invia il nome al server
         Main.getConnessione().sendCmdValue("hello", nome);
+    }
+
+    public String getDestinatario() {
+        return destinatario;
+    }
+
+    public void setDestinatario(String destinatario) {
+        this.destinatario = destinatario;
     }
 }
