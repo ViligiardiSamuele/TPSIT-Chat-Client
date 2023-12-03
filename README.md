@@ -1,6 +1,6 @@
 ##### Server: [TPSIT-Chat-Server](https://github.com/MatteoFrosinii/ChatServer)
 
-# ⚠️Aggiunta l'interfaccia grafica
+# Aggiunta l'interfaccia grafica
 
 ## Protocollo Utilizzato
 |Codice                 |Direzione       |Contenuto Data     |Azione                                                                          |
@@ -15,10 +15,6 @@
 |msg                    |Client -> Server|Messaggio          |Messaggio da inviare                                                            |
 |msg                    |Server -> Client|Messaggio          |Messaggio da ricevere                                                           |
 |msgRecivedBroadcast    |Server -> Client|Messaggio broadcast|Messaggio in broadcast inviato dal Server a tutti i client                      |
-
-## Protocolli WIP
-|Codice                 |Direzione       |Contenuto Data     |Azione                                                                          |
-|-----------------------|----------------|-------------------|--------------------------------------------------------------------------------| 
 |chatRequest            |Client -> Server|1                  |richiede al server la chat con l'user attualmente connesso                      |
 |chatData               |Server -> Client|chat,null          |invio della chat al client, se null vuol dire che è il primo messaggio scritto  |
 
