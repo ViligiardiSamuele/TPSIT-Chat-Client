@@ -24,8 +24,7 @@ public class JF_Main extends JFrame {
         JP_chatArea.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
         JP_userList = new JP_userList();
         JP_userList.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        JP_userList.setVisible(false);
-        JP_chatMode = new JP_chatSelector(this);
+        JP_chatMode = new JP_chatSelector();
         JP_chatMode.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         add(JP_chatMode, BorderLayout.PAGE_START);
@@ -45,7 +44,7 @@ public class JF_Main extends JFrame {
                 System.exit(0);
             }
         });
-
+        setFocusable(false);
         setVisible(true);
     }
 

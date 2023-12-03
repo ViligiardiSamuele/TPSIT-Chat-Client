@@ -8,6 +8,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import me.villo.ProtocolCodes;
+import me.villo.gui.JF_Main;
 import me.villo.gui.Main;
 
 public class JP_userList extends JPanel implements ListSelectionListener {
@@ -27,20 +28,25 @@ public class JP_userList extends JPanel implements ListSelectionListener {
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        if (!JL_utentiOnline.getSelectedValue().contains(" (Tu)")
-                && !Main.getJF_Main().getTitle().contains(JL_utentiOnline.getSelectedValue())) {
-            Main.getConnessione().sendCmdValue(ProtocolCodes.SWITCH_TO_USER,
-                    JL_utentiOnline.getSelectedValue());
-            if (Main.getConnessione().checkNewValueOfLMFS()) {
-                Main.getJF_Main().getJP_chatArea().getJL_private()
-                        .setText("Privata [" + JL_utentiOnline.getSelectedValue() + "]");
-                Main.getJF_Main().getJP_chatArea().getJTA_private().setText(""); // svuola la chat privata
-                Main.getJF_Main().getJP_chatArea().getJTF_MsgBar().setText("");
-                Main.getJF_Main().getJP_chatArea().getJTF_MsgBar().setEnabled(true);
+        try {
+            if (!JL_utentiOnline.getSelectedValue().contains(" (Tu)")) {
+                Main.getJF_Main().getJP_chatMode().getJRB_broadcast().setSelected(false);
+                Main.getConnessione().sendCmdValue(ProtocolCodes.SWITCH_TO_USER,
+                        JL_utentiOnline.getSelectedValue());
+                if (Main.getConnessione().checkNewValueOfLMFS()) {
+                    Main.getJF_Main().getJP_chatArea().getJL_private()
+                            .setText("Privata [" + JL_utentiOnline.getSelectedValue() + "]");
+                    Main.getJF_Main().getJP_chatArea().getJTA_private().setText(""); // svuola la chat privata
+                    Main.getConnessione().sendCmdValue(ProtocolCodes.CHAT_REQUEST, "1");
+                    Main.getJF_Main()
+                            .setTitle("Chat - " + Main.getUtente().getNome() + " -> "
+                                    + JL_utentiOnline.getSelectedValue());
+                    Main.getJF_Main().getJP_chatArea().getJTF_MsgBar().setText("");
+                    Main.getJF_Main().getJP_chatArea().getJTF_MsgBar().setEnabled(true);
+                }
             }
-            Main.getConnessione().sendCmdValue(ProtocolCodes.CHAT_REQUEST, "1");
-            Main.getJF_Main()
-                    .setTitle("Chat - " + Main.getUtente().getNome() + " -> " + JL_utentiOnline.getSelectedValue());
+        } catch (Exception ex) {
         }
+
     }
 }

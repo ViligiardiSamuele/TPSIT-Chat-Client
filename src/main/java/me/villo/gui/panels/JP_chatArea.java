@@ -12,8 +12,6 @@ import javax.swing.text.DefaultCaret;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import me.villo.ProtocolCodes;
 import me.villo.gui.Main;

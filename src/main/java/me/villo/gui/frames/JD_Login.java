@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 
 import me.villo.ProtocolCodes;
 import me.villo.gui.Main;
+import me.villo.gui.panels.JP_userList;
 
 public class JD_Login {
 
@@ -50,9 +51,8 @@ public class JD_Login {
                         JL_info.setText("In attesa del server...");
                         Main.getUtente().setNome(JTF_name.getText());
                         Main.getConnessione().sendCmdValue(ProtocolCodes.SWITCH_BROADCAST, "1");
-                        //if (Main.getConnessione().checkNewValueOfLMFS()) {
-                            JD_Login.jDialog.setVisible(false);
-                        //}
+                        Main.getJF_Main().setFocusable(true);
+                        JD_Login.jDialog.setVisible(false);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
