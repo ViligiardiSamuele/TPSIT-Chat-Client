@@ -1,28 +1,24 @@
 package me.villo;
 
+import me.villo.gui.Main;
+
+/**
+ * Classe POJO Utente
+ * @author Viligiardi Samuele
+ */
 public class Utente {
     private String nome;
-    private Connessione connessione;
-    private ActionManager actionManager;
-
-    public Utente(String nome, String ip, int porta) {
-        this.nome = nome;
-        this.connessione = new Connessione(ip, porta, this);
-        actionManager = new ActionManager(connessione);
-        connessione.sendCmdValue("hello", nome);
-
-    }
-
-    public ActionManager getActionManager() {
-        return actionManager;
+    
+    public Utente() {
     }
 
     public String getNome() {
         return nome;
     }
 
-    public Connessione getConnessione() {
-        return connessione;
+    public void setNome(String nome) {
+        this.nome = nome;
+        // invia il nome al server
+        Main.getConnessione().sendCmdValue("hello", nome);
     }
-
 }
